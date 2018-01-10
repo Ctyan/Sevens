@@ -1,0 +1,20 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+#formattext {
+    -fx-font: 18px System;
+    -fx-alignment: CENTER;
+    -fx-text-fill: BLACK;
+    -fx-border-color: black;
+}
+
+#chattext {
+	-fx-font: 18px System;
+	-fx-text-fill: WHITE;
+	-fx-alignment: CENTER;
+}
+
+#ruletext {
+	-fx-font: 18px System;
+	-fx-text-fill: WHITE;
+	-fx-alignment: CENTER;
+}

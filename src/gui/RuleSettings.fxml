@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="700.0" prefWidth="1100.0" style="-fx-background-color: #EEFFFF;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.RuleController">
+   <children>
+      <Button layoutX="999.0" layoutY="646.0" mnemonicParsing="false" onAction="#okButtonAction" prefHeight="39.0" prefWidth="86.0" style="-fx-base: #D7EEFF;" text="OK">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+      <Button layoutX="846.0" layoutY="646.0" mnemonicParsing="false" onAction="#defaultButtonAction" prefHeight="39.0" prefWidth="140.0" style="-fx-base: #D7EEFF;" text="設定の初期化">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+      <Label layoutX="15.0" layoutY="14.0" prefHeight="70.0" prefWidth="1072.0" style="-fx-background-color: #D7EEFF; -fx-border-color: black; -fx-background-radius: 10px; -fx-border-radius: 10px;" text="  ルール設定">
+         <font>
+            <Font size="48.0" />
+         </font>
+      </Label>
+      <Label layoutX="28.0" layoutY="116.0" prefHeight="40.0" prefWidth="110.0" text="ラウンド数">
+         <font>
+            <Font size="28.0" />
+         </font>
+      </Label>
+      <Label layoutX="26.0" layoutY="235.0" text="パス制限">
+         <font>
+            <Font size="28.0" />
+         </font>
+      </Label>
+      <Label layoutX="28.0" layoutY="350.0" text="ジョーカー">
+         <font>
+            <Font size="28.0" />
+         </font>
+      </Label>
+      <Label layoutX="27.0" layoutY="469.0" text="トンネル">
+         <font>
+            <Font size="28.0" />
+         </font>
+      </Label>
+      <RadioButton id="radioButton1" fx:id="radio1" layoutX="26.0" layoutY="164.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" selected="true" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="1">
+         <font>
+            <Font size="24.0" />
+         </font>
+         <toggleGroup>
+            <ToggleGroup fx:id="Round" />
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton layoutX="112.0" layoutY="164.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="3" toggleGroup="$Round">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </RadioButton>
+      <RadioButton layoutX="198.0" layoutY="164.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="5" toggleGroup="$Round">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </RadioButton>
+      <RadioButton layoutX="284.0" layoutY="164.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="7" toggleGroup="$Round">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </RadioButton>
+      <RadioButton layoutX="28.0" layoutY="286.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="1">
+         <font>
+            <Font size="24.0" />
+         </font>
+         <toggleGroup>
+            <ToggleGroup fx:id="Pass" />
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton layoutX="114.0" layoutY="286.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="2" toggleGroup="$Pass">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </RadioButton>
+      <RadioButton id="radioButton2" fx:id="radio2" layoutX="200.0" layoutY="286.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" selected="true" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="3" toggleGroup="$Pass">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </RadioButton>
+      <RadioButton id="radioButton3" fx:id="radio3" layoutX="28.0" layoutY="398.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" selected="true" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="あり">
+         <font>
+            <Font size="24.0" />
+         </font>
+         <toggleGroup>
+            <ToggleGroup fx:id="Joker" />
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton layoutX="114.0" layoutY="398.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="なし" toggleGroup="$Joker">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </RadioButton>
+      <RadioButton id="radioButton4" fx:id="radio4" layoutX="26.0" layoutY="517.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" selected="true" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="あり">
+         <font>
+            <Font size="24.0" />
+         </font>
+         <toggleGroup>
+            <ToggleGroup fx:id="Tunnel" />
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton layoutX="112.0" layoutY="517.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="なし" toggleGroup="$Tunnel">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </RadioButton>
+   </children>
+</AnchorPane>
