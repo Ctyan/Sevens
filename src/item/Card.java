@@ -1,3 +1,4 @@
+package item;
 import javafx.scene.image.Image;
 
 public class Card {
