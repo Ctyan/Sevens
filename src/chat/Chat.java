@@ -1,4 +1,4 @@
-package item;
+package chat;
 import java.io.Serializable;
 
 public class Chat implements Serializable{

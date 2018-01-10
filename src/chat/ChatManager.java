@@ -1,4 +1,4 @@
-package item;
+package chat;
 
 public class ChatManager {
 
