@@ -1,4 +1,4 @@
-package protocpl;
+package protocol;
 import item.Chat;
 
 public class ChatProtocol extends Protocol{

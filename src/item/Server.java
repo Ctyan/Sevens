@@ -7,8 +7,8 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
-import protocpl.ChatProtocol;
-import protocpl.Protocol;
+import protocol.ChatProtocol;
+import protocol.Protocol;
 
 public class Server implements Runnable{
 	Map<Socket, ServerThread> clients;

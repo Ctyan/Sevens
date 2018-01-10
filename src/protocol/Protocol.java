@@ -1,4 +1,4 @@
-package protocpl;
+package protocol;
 import java.io.Serializable;
 
 public class Protocol implements Serializable{

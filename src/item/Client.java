@@ -6,9 +6,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import protocpl.ChatProtocol;
-import protocpl.GameProtocol;
-import protocpl.Protocol;
+import protocol.ChatProtocol;
+import protocol.GameProtocol;
+import protocol.Protocol;
 
 /**起動すると指定されたサーバへ接続します*/
 public class Client {

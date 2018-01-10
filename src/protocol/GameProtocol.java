@@ -1,4 +1,4 @@
-package protocpl;
+package protocol;
 import item.Game;
 
 public class GameProtocol extends Protocol{
