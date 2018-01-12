@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 import gui.*;
 
@@ -16,8 +17,10 @@ import protocol.Protocol;
 
 /**起動すると指定されたサーバへ接続します*/
 public class Client {
+	private static final String SERVER_IP = "localhost";
 	//TODO GUImanager, Listener, etc...
 	GUIManager guimanager;
+	gui.Main guimain;
 	
 	String name;
 	Socket socket;
@@ -26,27 +29,26 @@ public class Client {
 	ObjectInputStream ois;
 
 	public static void main(String[] args){
-		BufferedReader  reader;
+		BufferedReader  reader = new BufferedReader(new InputStreamReader(System.in));
 		try{
-			reader = new BufferedReader(new InputStreamReader(System.in));
-			System.out.println("Your name >");
-			Client client = new Client(reader.readLine());
-			System.out.print("Server name(localhost or 133.27.....)? >");
-			String serverName = reader.readLine();
-			Socket socket = new Socket(serverName, 5001);
-			System.out.print("サーバへ接続成功");
-
-			client.oos = new ObjectOutputStream(socket.getOutputStream());
-			client.ois = new ObjectInputStream(socket.getInputStream());
-			new ClientReciever(client.ois, client).start();
-
+			//reader = new BufferedReader(new InputStreamReader(System.in));
+			//System.out.println("Your name >");
+			Client client = new Client("hoge");
+			//System.out.print("Server name(localhost or 133.27.....)? >");
+			
+			client.guimain.main(args);
+			
+			//String serverName = SERVER_IP;
+			//client.connectServer(serverName, 5001);
+			/* */
+			
 			//マルチコンソールチャット テスト用
-			/*
+			/* */
 			while(true){
 				String line = reader.readLine();
 				client.sendChat(new Chat(line, line.length(), client.name));
 			}
-			 */
+			
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -58,8 +60,25 @@ public class Client {
 
 	public Client(String name){
 		this.name = name;
+		this.guimanager = new GUIManager();
+		this.guimain = new gui.Main();
 	}
 
+	/**指定したサーバに接続する*/
+	public void connectServer(String serverName, int port) {
+		Socket socket;
+		try {
+			socket = new Socket(serverName, 5001);
+			System.out.print("サーバへ接続成功");
+			oos = new ObjectOutputStream(socket.getOutputStream());
+			ois = new ObjectInputStream(socket.getInputStream());
+			new ClientReciever(ois, this).start();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/**受け取ったChatProtocolの中身を見る, GUIへ通知させる処理を追加する*/
 	public void recvChat(ChatProtocol cp){
 		Chat chat = cp.getChat();
