@@ -22,17 +22,28 @@ public class RuleController {
 	//alert
 	Alert alert = new Alert(AlertType.INFORMATION);
 	int member = 3;
+	GUIListener listener;
+	//rule
+	int round;
+	int pass;
+	boolean joker;
+	boolean tunnel;
 
 	@FXML
 	protected void okButtonAction(ActionEvent e){
 		System.out.println("ok");
-		System.out.println(Round.getSelectedToggle());
-		System.out.println(Pass.getSelectedToggle());
-		System.out.println(Joker.getSelectedToggle());
-		System.out.println(Tunnel.getSelectedToggle());
+		round = Integer.valueOf((String) Round.getSelectedToggle().getUserData());
+		pass = Integer.valueOf((String) Pass.getSelectedToggle().getUserData());
+		joker = Boolean.valueOf((String) Joker.getSelectedToggle().getUserData());
+		tunnel = Boolean.valueOf((String) Tunnel.getSelectedToggle().getUserData());
+		System.out.println(round);
+		System.out.println(pass);
+		System.out.println(joker);
+		System.out.println(tunnel);
 
 		if(member >= 3 ){
 			Main.manager.nextScene("play.fxml");
+			listener.registarRule(round, pass, joker, tunnel);
 		}else{
 			alert.setTitle("Information Dialog");
 			alert.setHeaderText(null);
