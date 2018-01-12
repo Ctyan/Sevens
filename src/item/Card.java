@@ -1,5 +1,4 @@
 package item;
-import javafx.scene.image.Image;
 
 public class Card {
 
@@ -13,18 +12,10 @@ public class Card {
 
 	private int cardNumber;
 	private int cardType;
-	private Image cardImage;
 
-	public Card(int cardNumber, int cardType, String url) {
+	public Card(int cardNumber, int cardType) {
 		this.cardNumber = cardNumber;
 		this.cardType = cardType;
-		cardImage = new Image(url);
-	}
-
-	public Card(String url) {
-		cardNumber = JOKER_NUMBER;
-		cardType = JOKER_TYPE;
-		cardImage = new Image(url);
 	}
 
 	public int getNumber() {
@@ -33,9 +24,5 @@ public class Card {
 
 	public int getType() {
 		return cardType;
-	}
-
-	public Image getImage() {
-		return cardImage;
 	}
 }
