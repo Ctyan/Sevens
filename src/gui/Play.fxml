@@ -243,5 +243,6 @@
                </image>
             </ImageView>
          </children></AnchorPane>
+      <AnchorPane fx:id="bord" layoutX="247.0" layoutY="66.0" prefHeight="360.0" prefWidth="780.0" />
    </children>
 </AnchorPane>

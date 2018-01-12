@@ -22,6 +22,7 @@ import javafx.scene.layout.VBox;
 
 public class PlayController implements Initializable {
 	public AnchorPane board; // ボード
+	public AnchorPane bord; // ボード
 	public VBox vbox; // 他プレイヤーの表示ボックス
 	public AnchorPane anchorpane; // anchorpane
 	// player
@@ -85,6 +86,8 @@ public class PlayController implements Initializable {
 		double x = 262;
 		double y = 507;
 		//spade heart club diamond
+		String filepath = "src/gui/resources/";
+
 		for (int i = 0; i < testhand.size(); i++) {
 			try {
 				cardImage = new Image(new FileInputStream(filepath + testhand.get(i) + ".gif"));
@@ -104,6 +107,7 @@ public class PlayController implements Initializable {
 			x += 40;
 			imageview.get(i).setOnMouseClicked((MouseEvent e) -> {
 				//System.out.println(e);
+				System.out.println(e.getSource());
 				removeCard((ImageView)e.getSource());
 			});
 		}
