@@ -6,6 +6,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import gui.*;
+
 import protocol.Chat;
 import protocol.ChatProtocol;
 import protocol.Game;
@@ -15,6 +17,8 @@ import protocol.Protocol;
 /**起動すると指定されたサーバへ接続します*/
 public class Client {
 	//TODO GUImanager, Listener, etc...
+	GUIManager guimanager;
+	
 	String name;
 	Socket socket;
 
@@ -49,6 +53,8 @@ public class Client {
 		}
 
 	}
+	
+	
 
 	public Client(String name){
 		this.name = name;
