@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 
 public class GUIManager {
 	Stage thisStage;
-	int memberCount = 1;
+	int memberCount = 0;
 	//test
 	String[] playername = new String[] {"a1","a2","a3","a4","a5"};
 	String[] playercard = new String[] {"club1", "heart1", "spade1", "diamond1"};
@@ -29,15 +29,15 @@ public class GUIManager {
 	public void gameStart(){
 		this.nextScene("play.fxml");
 	}
-
+	
 	public void setPlayerName(String[] playername){
 		this.playername = playername;
 	}
-
+	
 	public String[] getPlayerName(){
 		return this.playername;
 	}
-
+	
 	public void setPlayerCard(String[] playercard){
 		this.playercard = playercard;
 	}
@@ -45,7 +45,7 @@ public class GUIManager {
 	public String[] getPlayerCard(){
 		return playercard;
 	}
-
+	
 	public void nextScene(String nextScene){
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(nextScene));

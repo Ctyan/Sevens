@@ -12,11 +12,6 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			// Play
-			// Ranking
-			// RuleSettings
-			// Start
-			// Wait
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("RuleSettings.fxml"));
 			Parent root = loader.load();
 			Scene scene = new Scene(root);

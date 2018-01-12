@@ -2,6 +2,8 @@ package gui;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 
@@ -17,6 +19,9 @@ public class RuleController {
 	public RadioButton radio2;
 	public RadioButton radio3;
 	public RadioButton radio4;
+	//alert
+	Alert alert = new Alert(AlertType.INFORMATION);
+	int member = 3;
 
 	@FXML
 	protected void okButtonAction(ActionEvent e){
@@ -26,7 +31,14 @@ public class RuleController {
 		System.out.println(Joker.getSelectedToggle());
 		System.out.println(Tunnel.getSelectedToggle());
 
-		Main.manager.nextScene("Wait.fxml");
+		if(member >= 3 ){
+			Main.manager.nextScene("play.fxml");
+		}else{
+			alert.setTitle("Information Dialog");
+			alert.setHeaderText(null);
+			alert.setContentText("人数が足りていません");
+			alert.showAndWait();
+		}
 	}
 
 	@FXML

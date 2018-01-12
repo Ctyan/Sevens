@@ -14,7 +14,7 @@
             <Font size="100.0" />
          </font>
       </Label>
-      <Button contentDisplay="CENTER" layoutX="408.0" layoutY="435.0" mnemonicParsing="false" onAction="#StartGame" prefHeight="128.0" prefWidth="300.0" style="-fx-background-radius: 30px; -fx-base: orange; -fx-border-radius: 30px;" text="START">
+      <Button contentDisplay="CENTER" layoutX="408.0" layoutY="435.0" mnemonicParsing="false" onAction="#StartGame" prefHeight="128.0" prefWidth="300.0" style="-fx-background-radius: 30px; -fx-base: orange; -fx-border-radius: 30px;" text="参加する">
          <font>
             <Font size="60.0" />
          </font>
