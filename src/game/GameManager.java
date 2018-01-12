@@ -55,42 +55,6 @@ public class GameManager{
 		return MIN_PLAYER_VALUE <= playerCount;
 	}
 
-<<<<<<< HEAD
-	public boolean setGamePlayable(int roundValue, int passValue, boolean joker, boolean tunel) {
-		if(!isPlayerCountOK()) return false;
-
-		gamePlayable = new GamePlayable(roundValue, passValue, joker, tunel);
-		return true;
-	}
-
-	public boolean gameStart() {
-		if(gamePlayable == null) return false;
-
-		// プレイカードの用意
-		playingCard = new PlayingCard(gamePlayable.isJoker());
-		List<Card> playCardList = playingCard.getCardList();
-
-		// カードから7を抜き出す
-		playCardList.remove(new Card(Card.SPADE_TYPE, 7));
-		playCardList.remove(new Card(Card.HEART_TYPE, 7));
-		playCardList.remove(new Card(Card.CLUB_TYPE, 7));
-		playCardList.remove(new Card(Card.DIA_TYPE, 7));
-
-		// カードをシャッフルする
-		Collections.shuffle(playCardList);
-
-		// 開始プレイヤーを決める
-		Random r = new Random();
-		startPlayerNumber = r.nextInt() % playerCount;
-
-		//
-
-		return true;
-	}
-
-	public int getStartPlayerNumber() {
-		return startPlayerNumber;
-=======
 	public Player[] getPlayerList() {
 		return playerList;
 	}
@@ -142,6 +106,5 @@ public class GameManager{
 		}
 
 		return returnList;
->>>>>>> branch 'master' of https://github.com/Ctyan/Sevens.git
 	}
 }
