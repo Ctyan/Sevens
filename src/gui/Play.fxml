@@ -4,9 +4,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SplitMenuButton?>
-<?import javafx.scene.effect.Light.Distant?>
-<?import javafx.scene.effect.Lighting?>
-<?import javafx.scene.effect.Shadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -15,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="700.0" prefWidth="1100.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.PlayController">
+<AnchorPane fx:id="anchorpane" prefHeight="700.0" prefWidth="1100.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.PlayController">
    <children>
       <SplitMenuButton layoutX="464.0" layoutY="10.0" mnemonicParsing="false" style="-fx-base: orange;" text="STAMP">
         <items>
@@ -38,7 +35,6 @@
             <Font size="14.0" />
          </font>
       </Button>
-      <Pane fx:id="pane" layoutX="247.0" layoutY="66.0" prefHeight="360.0" prefWidth="780.0" style="-fx-border-color: black;" />
       <VBox fx:id="vbox" prefHeight="700.0" prefWidth="180.0" style="-fx-border-color: black;">
          <children>
             <Pane fx:id="vpane1" prefHeight="140.0" prefWidth="180.0" style="-fx-border-color: black;" visible="false">
@@ -224,224 +220,6 @@
       </Label>
       <HBox fx:id="chathbox" alignment="CENTER_LEFT" layoutX="196.0" layoutY="652.0" prefHeight="40.0" prefWidth="890.0" spacing="20.0" style="-fx-background-color: black; -fx-border-color: black;" AnchorPane.leftAnchor="196.0" AnchorPane.rightAnchor="14.0" />
       <HBox fx:id="rulehbox" alignment="CENTER" layoutX="572.0" layoutY="10.0" prefHeight="30.0" prefWidth="515.0" spacing="20.0" style="-fx-background-color: black; -fx-border-color: black;" />
-      <ImageView fx:id="card1" fitHeight="120.0" fitWidth="100.0" layoutX="262.0" layoutY="507.0" onMouseClicked="#CardClicked" pickOnBounds="true" preserveRatio="true" visible="false">
-         <effect>
-            <Lighting>
-               <bumpInput>
-                  <Shadow />
-               </bumpInput>
-               <light>
-                  <Light.Distant />
-               </light>
-            </Lighting>
-         </effect>
-         <image>
-            <Image url="@../../src/gui/resources/club1.gif" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="card2" fitHeight="120.0" fitWidth="100.0" layoutX="302.0" layoutY="507.0" onMouseClicked="#CardClicked" pickOnBounds="true" preserveRatio="true" visible="false">
-         <effect>
-            <Lighting>
-               <bumpInput>
-                  <Shadow />
-               </bumpInput>
-               <light>
-                  <Light.Distant />
-               </light>
-            </Lighting>
-         </effect>
-      </ImageView>
-      <ImageView fx:id="card3" fitHeight="120.0" fitWidth="100.0" layoutX="341.0" layoutY="507.0" onMouseClicked="#CardClicked" pickOnBounds="true" preserveRatio="true" visible="false">
-         <effect>
-            <Lighting>
-               <bumpInput>
-                  <Shadow />
-               </bumpInput>
-               <light>
-                  <Light.Distant />
-               </light>
-            </Lighting>
-         </effect>
-      </ImageView>
-      <ImageView fx:id="card4" fitHeight="120.0" fitWidth="100.0" layoutX="381.0" layoutY="507.0" onMouseClicked="#CardClicked" pickOnBounds="true" preserveRatio="true" visible="false">
-         <effect>
-            <Lighting>
-               <bumpInput>
-                  <Shadow />
-               </bumpInput>
-               <light>
-                  <Light.Distant />
-               </light>
-            </Lighting>
-         </effect>
-      </ImageView>
-      <ImageView fx:id="card5" fitHeight="120.0" fitWidth="100.0" layoutX="422.0" layoutY="507.0" onMouseClicked="#CardClicked" pickOnBounds="true" preserveRatio="true" visible="false">
-         <effect>
-            <Lighting>
-               <bumpInput>
-                  <Shadow />
-               </bumpInput>
-               <light>
-                  <Light.Distant />
-               </light>
-            </Lighting>
-         </effect>
-      </ImageView>
-      <ImageView fx:id="card6" fitHeight="120.0" fitWidth="100.0" layoutX="462.0" layoutY="507.0" onMouseClicked="#CardClicked" pickOnBounds="true" preserveRatio="true" visible="false">
-         <effect>
-            <Lighting>
-               <bumpInput>
-                  <Shadow />
-               </bumpInput>
-               <light>
-                  <Light.Distant />
-               </light>
-            </Lighting>
-         </effect>
-      </ImageView>
-      <ImageView fx:id="card7" fitHeight="120.0" fitWidth="100.0" layoutX="501.0" layoutY="507.0" onMouseClicked="#CardClicked" pickOnBounds="true" preserveRatio="true" visible="false">
-         <effect>
-            <Lighting>
-               <bumpInput>
-                  <Shadow />
-               </bumpInput>
-               <light>
-                  <Light.Distant />
-               </light>
-            </Lighting>
-         </effect>
-      </ImageView>
-      <ImageView fx:id="card8" fitHeight="120.0" fitWidth="100.0" layoutX="541.0" layoutY="507.0" onMouseClicked="#CardClicked" pickOnBounds="true" preserveRatio="true" visible="false">
-         <effect>
-            <Lighting>
-               <bumpInput>
-                  <Shadow />
-               </bumpInput>
-               <light>
-                  <Light.Distant />
-               </light>
-            </Lighting>
-         </effect>
-      </ImageView>
-      <ImageView fx:id="card9" fitHeight="120.0" fitWidth="100.0" layoutX="581.0" layoutY="507.0" onMouseClicked="#CardClicked" pickOnBounds="true" preserveRatio="true" visible="false">
-         <effect>
-            <Lighting>
-               <bumpInput>
-                  <Shadow />
-               </bumpInput>
-               <light>
-                  <Light.Distant />
-               </light>
-            </Lighting>
-         </effect>
-      </ImageView>
-      <ImageView fx:id="card10" fitHeight="120.0" fitWidth="100.0" layoutX="621.0" layoutY="507.0" onMouseClicked="#CardClicked" pickOnBounds="true" preserveRatio="true" visible="false">
-         <effect>
-            <Lighting>
-               <bumpInput>
-                  <Shadow />
-               </bumpInput>
-               <light>
-                  <Light.Distant />
-               </light>
-            </Lighting>
-         </effect>
-      </ImageView>
-      <ImageView fx:id="card11" fitHeight="120.0" fitWidth="100.0" layoutX="660.0" layoutY="507.0" onMouseClicked="#CardClicked" pickOnBounds="true" preserveRatio="true" visible="false">
-         <effect>
-            <Lighting>
-               <bumpInput>
-                  <Shadow />
-               </bumpInput>
-               <light>
-                  <Light.Distant />
-               </light>
-            </Lighting>
-         </effect>
-      </ImageView>
-      <ImageView fx:id="card12" fitHeight="120.0" fitWidth="100.0" layoutX="700.0" layoutY="507.0" onMouseClicked="#CardClicked" pickOnBounds="true" preserveRatio="true" visible="false">
-         <effect>
-            <Lighting>
-               <bumpInput>
-                  <Shadow />
-               </bumpInput>
-               <light>
-                  <Light.Distant />
-               </light>
-            </Lighting>
-         </effect>
-      </ImageView>
-      <ImageView fx:id="card13" fitHeight="120.0" fitWidth="100.0" layoutX="741.0" layoutY="507.0" onMouseClicked="#CardClicked" pickOnBounds="true" preserveRatio="true" visible="false">
-         <effect>
-            <Lighting>
-               <bumpInput>
-                  <Shadow />
-               </bumpInput>
-               <light>
-                  <Light.Distant />
-               </light>
-            </Lighting>
-         </effect>
-      </ImageView>
-      <ImageView fx:id="card14" fitHeight="120.0" fitWidth="100.0" layoutX="781.0" layoutY="507.0" onMouseClicked="#CardClicked" pickOnBounds="true" preserveRatio="true" visible="false">
-         <effect>
-            <Lighting>
-               <bumpInput>
-                  <Shadow />
-               </bumpInput>
-               <light>
-                  <Light.Distant />
-               </light>
-            </Lighting>
-         </effect>
-      </ImageView>
-      <ImageView fx:id="card15" fitHeight="120.0" fitWidth="100.0" layoutX="820.0" layoutY="507.0" onMouseClicked="#CardClicked" pickOnBounds="true" preserveRatio="true" visible="false">
-         <effect>
-            <Lighting>
-               <bumpInput>
-                  <Shadow />
-               </bumpInput>
-               <light>
-                  <Light.Distant />
-               </light>
-            </Lighting>
-         </effect>
-      </ImageView>
-      <ImageView fx:id="card16" fitHeight="120.0" fitWidth="100.0" layoutX="860.0" layoutY="507.0" onMouseClicked="#CardClicked" pickOnBounds="true" preserveRatio="true" visible="false">
-         <effect>
-            <Lighting>
-               <bumpInput>
-                  <Shadow />
-               </bumpInput>
-               <light>
-                  <Light.Distant />
-               </light>
-            </Lighting>
-         </effect>
-      </ImageView>
-      <ImageView fx:id="card17" fitHeight="120.0" fitWidth="100.0" layoutX="900.0" layoutY="507.0" onMouseClicked="#CardClicked" pickOnBounds="true" preserveRatio="true" visible="false">
-         <effect>
-            <Lighting>
-               <bumpInput>
-                  <Shadow />
-               </bumpInput>
-               <light>
-                  <Light.Distant />
-               </light>
-            </Lighting>
-         </effect>
-      </ImageView>
-      <ImageView fx:id="card18" fitHeight="120.0" fitWidth="100.0" layoutX="940.0" layoutY="507.0" onMouseClicked="#CardClicked" pickOnBounds="true" preserveRatio="true" visible="false">
-         <effect>
-            <Lighting>
-               <bumpInput>
-                  <Shadow />
-               </bumpInput>
-               <light>
-                  <Light.Distant />
-               </light>
-            </Lighting>
-         </effect>
-      </ImageView>
+      <AnchorPane fx:id="bord" layoutX="247.0" layoutY="66.0" prefHeight="360.0" prefWidth="780.0" style="-fx-border-color: black;" />
    </children>
 </AnchorPane>
