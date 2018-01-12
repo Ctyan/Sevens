@@ -12,7 +12,12 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("Play.fxml"));
+			// Play
+			// Ranking
+			// RuleSettings
+			// Start
+			// Wait
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("RuleSettings.fxml"));
 			Parent root = loader.load();
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
