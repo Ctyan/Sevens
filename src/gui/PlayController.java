@@ -21,6 +21,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 public class PlayController implements Initializable {
+	public AnchorPane board; // ボード
 	public AnchorPane bord; // ボード
 	public VBox vbox; // 他プレイヤーの表示ボックス
 	public AnchorPane anchorpane; // anchorpane
@@ -56,6 +57,8 @@ public class PlayController implements Initializable {
 	int passNum = 0;
 	ArrayList<String> testname = new ArrayList<String>();
 	ArrayList<String> testhand = new ArrayList<String>();
+	//filepath
+	private String filepath = "src/gui/resources/";
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -78,11 +81,12 @@ public class PlayController implements Initializable {
 	// player
 	public void createHand(ArrayList<String> testhand) {
 		Image cardImage = null;
-		String filepath = "src/gui/resources/";
 		ImageView iv = null;
 		Lighting lighting = new Lighting();
 		double x = 262;
 		double y = 507;
+		//spade heart club diamond
+		String filepath = "src/gui/resources/";
 
 		for (int i = 0; i < testhand.size(); i++) {
 			try {
@@ -102,6 +106,7 @@ public class PlayController implements Initializable {
 			anchorpane.getChildren().addAll(imageview.get(i));
 			x += 40;
 			imageview.get(i).setOnMouseClicked((MouseEvent e) -> {
+				//System.out.println(e);
 				System.out.println(e.getSource());
 				removeCard((ImageView)e.getSource());
 			});
@@ -109,7 +114,57 @@ public class PlayController implements Initializable {
 	}
 
 	public void removeCard(ImageView iv){
+		String text = testhand.remove(imageview.indexOf(iv));
+		System.out.println("remove"+text);
+		int index = imageview.indexOf(iv);
+		double x = imageview.get(index).getLayoutX();
+		imageview.remove(iv);
+		anchorpane.getChildren().remove(iv);
+		updateHand(index,x);
+		boardDraw(text);
+	}
 
+	public void updateHand(int index,double x){
+		double newX = x;
+		for(int i=0; i<imageview.size()-index; i++){
+			imageview.get(index+i).setLayoutX(newX);
+			newX += 40;
+		}
+	}
+
+	public void boardDraw(String text){
+		String mark = text.replaceFirst("[1-9]+", "");
+		String number = text.replaceFirst("[a-z]+", "");
+		int num = Integer.valueOf(number);
+		ImageView boardIv = null;
+		try {
+			boardIv = new ImageView(new Image(new FileInputStream(filepath + text + ".gif")));
+		} catch (FileNotFoundException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		}
+		boardIv.setFitHeight(90);
+		boardIv.setFitWidth(60);
+		if(mark.equals("spade")) boardIv.setLayoutY(0);
+		else if(mark.equals("heart")) boardIv.setLayoutY(90);
+		else if(mark.equals("club")) boardIv.setLayoutY(180);
+	    else if(mark.equals("diamond")) boardIv.setLayoutY(270);
+
+		if(num == 1) boardIv.setLayoutX(0);
+		else if(num == 2) boardIv.setLayoutX(60);
+		else if(num == 3) boardIv.setLayoutX(120);
+		else if(num == 4) boardIv.setLayoutX(180);
+		else if(num == 5) boardIv.setLayoutX(240);
+		else if(num == 6) boardIv.setLayoutX(300);
+		//else if(num == 7) boardIv.setLayoutX(360);
+		else if(num == 8) boardIv.setLayoutX(420);
+		else if(num == 9) boardIv.setLayoutX(480);
+		else if(num == 10) boardIv.setLayoutX(540);
+		else if(num == 11) boardIv.setLayoutX(600);
+		else if(num == 12) boardIv.setLayoutX(660);
+		else if(num == 13) boardIv.setLayoutX(720);
+
+		board.getChildren().addAll(boardIv);
 	}
 
 	private void createPlayer(String player, int userpassNum) {

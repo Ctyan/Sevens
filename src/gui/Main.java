@@ -19,7 +19,7 @@ public class Main extends Application {
 			 * Play
 			 * Ranking
 			 */
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("Start.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("Play.fxml"));
 			Parent root = loader.load();
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());

@@ -12,7 +12,7 @@ public class GUIManager {
 	int memberCount = 0;
 	//test
 	String[] playername = new String[] {"a1","a2","a3","a4","a5"};
-	String[] playercard = new String[] {"club1", "heart1", "spade1", "diamond1"};
+	String[] playercard = new String[] {"club1", "heart1", "spade1", "diamond1","club11"};
 
 	public void setThisStage(Stage stage){
 		this.thisStage = stage;
