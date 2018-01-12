@@ -2,21 +2,23 @@ package game;
 
 public class GameField {
 
-	private boolean[] spadeLine;
-	private boolean[] heartLine;
-	private boolean[] clubLine;
-	private boolean[] diaLine;
+	private boolean[][] cardBlocks;
 
 	public GameField() {
-		spadeLine = new boolean[13];
-		heartLine = new boolean[13];
-		clubLine = new boolean[13];
-		diaLine = new boolean[13];
+		cardBlocks = new boolean[4][13];
 	}
 
-	public void setCard(int t, int n) {
+	public boolean setCard(int t, int n) {
+		if(t<0 || 4<= t || n<0 || 13<=n) return false;
+		if(isCard(t, n)) return false;
 
+		cardBlocks[t][n] = true;
+		return true;
 	}
 
-	// public boolean
+	public boolean isCard(int t, int n) {
+		if(t<0 || 4<= t || n<0 || 13<=n) return false;
+
+		return cardBlocks[t][n];
+	}
 }
