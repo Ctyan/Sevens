@@ -220,6 +220,29 @@
       </Label>
       <HBox fx:id="chathbox" alignment="CENTER_LEFT" layoutX="196.0" layoutY="652.0" prefHeight="40.0" prefWidth="890.0" spacing="20.0" style="-fx-background-color: black; -fx-border-color: black;" AnchorPane.leftAnchor="196.0" AnchorPane.rightAnchor="14.0" />
       <HBox fx:id="rulehbox" alignment="CENTER" layoutX="572.0" layoutY="10.0" prefHeight="30.0" prefWidth="515.0" spacing="20.0" style="-fx-background-color: black; -fx-border-color: black;" />
-      <AnchorPane fx:id="bord" layoutX="247.0" layoutY="66.0" prefHeight="360.0" prefWidth="780.0" style="-fx-border-color: black;" />
+      <AnchorPane fx:id="board" layoutX="247.0" layoutY="66.0" prefHeight="360.0" prefWidth="780.0">
+         <children>
+            <ImageView fx:id="spade7" fitHeight="90.0" fitWidth="60.0" layoutX="360.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../src/gui/resources/spade7.gif" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="heart7" fitHeight="90.0" fitWidth="60.0" layoutX="360.0" layoutY="90.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../src/gui/resources/heart7.gif" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="club7" fitHeight="90.0" fitWidth="60.0" layoutX="360.0" layoutY="180.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../src/gui/resources/club7.gif" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="diamond7" fitHeight="90.0" fitWidth="60.0" layoutX="360.0" layoutY="270.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../src/gui/resources/diamond7.gif" />
+               </image>
+            </ImageView>
+         </children></AnchorPane>
+      <AnchorPane fx:id="bord" layoutX="247.0" layoutY="66.0" prefHeight="360.0" prefWidth="780.0" />
    </children>
 </AnchorPane>
