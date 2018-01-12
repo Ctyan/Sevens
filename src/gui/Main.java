@@ -29,7 +29,8 @@ public class Main extends Application {
 			//表示
 			primaryStage.setScene(scene);
 			primaryStage.show();
-		} catch(Exception e) {
+		}
+		catch(Exception e) {
 			e.printStackTrace();
 		}
 	}

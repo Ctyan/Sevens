@@ -102,14 +102,17 @@ public class PlayController implements Initializable {
 			anchorpane.getChildren().addAll(imageview.get(i));
 			x += 40;
 			imageview.get(i).setOnMouseClicked((MouseEvent e) -> {
-				System.out.println(e.getSource());
+				System.out.println(e);
 				removeCard((ImageView)e.getSource());
 			});
 		}
 	}
 
 	public void removeCard(ImageView iv){
-
+		String text = testhand.remove(imageview.indexOf(iv));
+		System.out.println("remove:"+text);
+		imageview.remove(iv);
+		anchorpane.getChildren().remove(iv);
 	}
 
 	private void createPlayer(String player, int userpassNum) {
