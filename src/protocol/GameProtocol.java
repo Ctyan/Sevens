@@ -1,5 +1,4 @@
 package protocol;
-import item.Game;
 
 public class GameProtocol extends Protocol{
 	private static final long serialVersionUID = 8726301106850620523L;

@@ -6,9 +6,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import chat.Chat;
-import item.Game;
+import protocol.Chat;
 import protocol.ChatProtocol;
+import protocol.Game;
 import protocol.GameProtocol;
 import protocol.Protocol;
 

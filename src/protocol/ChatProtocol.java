@@ -1,5 +1,4 @@
 package protocol;
-import chat.Chat;
 
 public class ChatProtocol extends Protocol{
 	private static final long serialVersionUID = -2345792527523383072L;
