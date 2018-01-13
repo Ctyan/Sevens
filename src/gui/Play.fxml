@@ -208,12 +208,12 @@
                </children>
             </Pane>
          </children></VBox>
-      <Label fx:id="userpass" layoutX="668.0" layoutY="455.0" prefHeight="27.0" prefWidth="54.0">
+      <Label fx:id="myPass" layoutX="668.0" layoutY="455.0" prefHeight="27.0" prefWidth="54.0">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Label fx:id="username" alignment="CENTER" layoutX="464.0" layoutY="453.0" prefHeight="30.0" prefWidth="142.0">
+      <Label fx:id="myName" alignment="CENTER" layoutX="464.0" layoutY="453.0" prefHeight="30.0" prefWidth="142.0">
          <font>
             <Font size="18.0" />
          </font>
@@ -243,7 +243,7 @@
                </image>
             </ImageView>
          </children></AnchorPane>
-      <AnchorPane fx:id="bord" layoutX="247.0" layoutY="66.0" prefHeight="360.0" prefWidth="780.0" />
+      <AnchorPane fx:id="board" layoutX="247.0" layoutY="66.0" prefHeight="360.0" prefWidth="780.0" />
       <Label layoutX="606.0" layoutY="454.0" prefHeight="30.0" prefWidth="54.0" text="パス：">
          <font>
             <Font size="18.0" />

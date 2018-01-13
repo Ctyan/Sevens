@@ -1,6 +1,10 @@
 package gui;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
@@ -11,6 +15,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
 public class RankingController implements Initializable{
+	GUIManager manager = GUIManager.getInstance();
+	GUIListener listener = manager.listener;
 	public Button button1; //次のラウンドへ
 	public Button button2; //終了
 	public VBox vbox0,vbox1,vbox2,vbox3,vbox4,vbox5,vbox6; //vbox
@@ -23,18 +29,20 @@ public class RankingController implements Initializable{
 	public Label e_score1,e_score2,e_score3,e_score4,e_score5,e_score6,e_score7; //e_player socre
 	public Label f_score1,f_score2,f_score3,f_score4,f_score5,f_score6,f_score7; //f_player socre
 	public Label a_sum,b_sum,c_sum,d_sum,e_sum,f_sum; //player score sum
-	boolean flag = false; //changebutton
 	int n=0;
 	public Label[] name,a_score,b_score,c_score,d_score,e_score,f_score,sum;
-	GUIManager manager = GUIManager.getInstance();
-	GUIListener listener;
+	Map<Integer, String> playerName = new HashMap<>(); //ID　プレイヤー名
+	Map<Integer, Integer> playerScore = new HashMap<>(); //ラウンドのスコア
+	List<Integer> listId = new ArrayList<Integer>(); //プレイヤーIDのリスト
+	int myId; //メインプレイヤーのID
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		if(flag) changeButton();
+		if(manager.getChangeButtonflag()) changeButton();
 		if(n==0) setArray();
-		setScore();
 		createRanking();
+		setScore();
+		calcSum();
 	}
 
 	public void setArray(){
@@ -46,13 +54,18 @@ public class RankingController implements Initializable{
 		e_score = new Label[] {e_score1,e_score2,e_score3,e_score4,e_score5,e_score6,e_score7};
 		f_score = new Label[] {f_score1,f_score2,f_score3,f_score4,f_score5,f_score6,f_score7};
 		sum = new Label[] {a_sum,b_sum,c_sum,d_sum,e_sum,f_sum};
+		playerName = manager.getPlayerName();
+		playerScore = manager.getPlayerScore();
+		myId = manager.getMyId(); //メインプレイやのID
+		for(Integer id : playerName.keySet()) listId.add(id); //プレイヤーのIDリスト
 		n ++;
 	}
 
 	public void createRanking(){
-		String[] playername = manager.getPlayerName();;
-		for(int i=0; i<playername.length; i++){
-			name[i].setText(playername[i]);
+		int i = 0;
+		for(Integer id : listId){
+			name[i].setText(playerName.get(id));
+			i ++;
 		}
 	}
 
@@ -64,18 +77,25 @@ public class RankingController implements Initializable{
 
 	}
 
+	/**全員が次のラウンドへを押した場合このメソッドを呼び出して次のラウンドへ進む*/
+	public void nextRound(){
+		//manager.nextScene("play.fxml");
+	}
+
 	@FXML
 	protected void nextRound(ActionEvent e){
 		System.out.println("次のラウンドへ");
-		manager.nextScene("play.fxml");
+		listener.nextGame(true);
 	}
 
 	@FXML
 	protected void exitRound(ActionEvent e){
 		System.out.println("終了");
-		manager.nextScene("Start.fxml");
+		listener.exitGame(true);
+		//manager.nextScene("Start.fxml");
 	}
 
+	/**ボタンの切り替え　次のラウンドへ➡終了*/
 	public void changeButton(){
 		button1.setVisible(false);
 		button2.setVisible(true);

@@ -7,10 +7,10 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
 
 public class StartController {
+	GUIManager manager = GUIManager.getInstance();
+	GUIListener listener = manager.listener;
 	public TextField text;
 	Alert alert = new Alert(AlertType.INFORMATION);
-	GUIManager manager = GUIManager.getInstance();
-	GUIListener listener;
 
 	@FXML
 	protected void StartGame(ActionEvent e) {
@@ -23,17 +23,12 @@ public class StartController {
 			alert.showAndWait();
 		} else {
 			System.out.println(username);
-			if (listener != null) manager.listener.joinGame(username);
+			if (listener != null){
+				listener.joinGame(username);
+				//if (manager.getRuleSceneFlag()) manager.nextScene("RuleSettings.fxml");
+				//else manager.nextScene("Wait.fxml");
+			}
 		}
-		if (manager.getRuleSceneFlag()) manager.nextScene("RuleSettings.fxml");
-		else manager.nextScene("Wait.fxml");
 	}
 
-	public GUIListener getListener() {
-		return listener;
-	}
-
-	public void setListener(GUIListener listener) {
-		this.listener = listener;
-	}
 }
