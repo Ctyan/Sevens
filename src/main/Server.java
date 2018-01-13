@@ -77,6 +77,21 @@ public class Server implements Runnable{
 		System.out.println("entry-player:"+pe);
 		sender.send(new PlayerEntryProtocol(pe));
 	}
+	
+	/***/
+	public void recvGameRule(GameRuleProtocol prot, ServerThread sender) {
+		GameRule gr = prot.getGameRule();
+		boolean isPlayable = gamemanager.setGamePlayable(gr.getRound(), gr.getPass(), gr.isJoker(), gr.isTunnel());
+		if(isPlayable) {
+			for(ServerThread st: clients.values()) {
+				st.send(prot);
+			}
+		}
+		else {
+			//false:送り主に開始できないことを送信
+			//sender.send(sendmsg);
+		}
+	}
 }
 
 
@@ -147,6 +162,11 @@ class ServerThread extends Thread{
 		case 2:
 			mainserver.recvPlayerEntry((PlayerEntryProtocol)prot, this);
 			break;
+		//GameRule
+		case 3:
+			mainserver.recvGameRule((GameRuleProtocol)prot, this);
+			break;
+			
 		default:
 			break;
 		}
