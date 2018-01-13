@@ -51,7 +51,7 @@ public class Client implements GUIListener{
 	}
 	
 	public Client() {
-		this.guimanager = new GUIManager();
+		this.guimanager = GUIManager.getInstance();
 		this.guimanager.setGUIListener(this);
 		this.guimain = new gui.Main();
 		this.guimain.setGUIManger(this.guimanager);
@@ -59,7 +59,7 @@ public class Client implements GUIListener{
 
 	public Client(String name){
 		this.name = name;
-		this.guimanager = new GUIManager();
+		this.guimanager = GUIManager.getInstance();
 		this.guimanager.setGUIListener(this);
 		this.guimain = new gui.Main();
 		this.guimain.setGUIManger(this.guimanager);
@@ -99,12 +99,14 @@ public class Client implements GUIListener{
 			e.printStackTrace();
 		}
 	}
-
+	
+	/**チャットを送る*/
 	public void sendChat(Chat chat){
 		send(new ChatProtocol(chat));
 		System.out.println("send:"+chat);
 	}
-
+	
+	/**ゲームに関する情報を送る*/
 	public void sendGame(Game game){
 		send(new GameProtocol(game));
 		System.out.println("send:"+game);
@@ -120,6 +122,26 @@ public class Client implements GUIListener{
 
 	@Override
 	public void registarRule(int round, int passNum, boolean joker, boolean tunnel) {
+		
+	}
+
+	@Override
+	public void cancelGame(boolean cancel) {
+		
+	}
+
+	@Override
+	public void sendChat(String chat) {
+		
+	}
+
+	@Override
+	public void sendCard(String card) {
+		
+	}
+
+	@Override
+	public void usedPass(boolean pass) {
 		
 	}
 }
