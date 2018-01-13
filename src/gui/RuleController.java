@@ -43,7 +43,7 @@ public class RuleController {
 
 		if(member >= 3 ){
 			Main.manager.nextScene("play.fxml");
-			listener.registarRule(round, pass, joker, tunnel);
+			Main.manager.listener.registarRule(round, pass, joker, tunnel);
 		}else{
 			alert.setTitle("Information Dialog");
 			alert.setHeaderText(null);
