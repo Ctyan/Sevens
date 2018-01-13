@@ -26,7 +26,8 @@ public class RankingController implements Initializable{
 	boolean flag = false; //changebutton
 	int n=0;
 	public Label[] name,a_score,b_score,c_score,d_score,e_score,f_score,sum;
-	GUIManager manager = new GUIManager();
+	GUIManager manager = GUIManager.getInstance();
+	GUIListener listener = manager.listener;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -66,13 +67,13 @@ public class RankingController implements Initializable{
 	@FXML
 	protected void nextRound(ActionEvent e){
 		System.out.println("次のラウンドへ");
-		Main.manager.nextScene("play.fxml");
+		manager.nextScene("play.fxml");
 	}
 
 	@FXML
 	protected void exitRound(ActionEvent e){
 		System.out.println("終了");
-		Main.manager.nextScene("Start.fxml");
+		manager.nextScene("Start.fxml");
 	}
 
 	public void changeButton(){
