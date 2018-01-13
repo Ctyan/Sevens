@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 public class GUIManager {
 	Stage thisStage;
 	int memberCount = 0;
+	GUIListener listener;
 	//test
 	String[] playername = new String[] {"a1","a2","a3","a4","a5"};
 	String[] playercard = new String[] {"club1", "heart1", "spade1", "diamond1","club11"};
@@ -46,6 +47,14 @@ public class GUIManager {
 		return playercard;
 	}
 	
+	public void setGUIListener(GUIListener listener) {
+		this.listener = listener;
+	}
+	
+	public GUIListener getGUIListener() {
+		return this.listener;
+	}
+	
 	public void nextScene(String nextScene){
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(nextScene));
@@ -54,10 +63,11 @@ public class GUIManager {
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			thisStage.setScene(scene);
 			thisStage.show();
-		} catch (IOException e) {
-			// TODO 自動生成された catch ブロック
+		}
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+	
 }
 
