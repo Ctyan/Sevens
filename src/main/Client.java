@@ -5,7 +5,6 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 import gui.*;
 import protocol.*;
@@ -53,8 +52,8 @@ public class Client implements GUIListener{
 	public Client() {
 		this.guimanager = GUIManager.getInstance();
 		this.guimanager.setGUIListener(this);
+		this.guimanager.setRuleSceneFlag(false);
 		this.guimain = new gui.Main();
-		this.guimain.setGUIManger(this.guimanager);
 	}
 
 	public Client(String name){
@@ -62,7 +61,6 @@ public class Client implements GUIListener{
 		this.guimanager = GUIManager.getInstance();
 		this.guimanager.setGUIListener(this);
 		this.guimain = new gui.Main();
-		this.guimain.setGUIManger(this.guimanager);
 	}
 
 	/**指定したサーバに接続する*/
@@ -74,19 +72,12 @@ public class Client implements GUIListener{
 			oos = new ObjectOutputStream(socket.getOutputStream());
 			ois = new ObjectInputStream(socket.getInputStream());
 			new ClientReciever(ois, this).start();
-			
 			//接続後, user_nameを送る
 			send(new PlayerEntryProtocol(new PlayerEntry(this.name)));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-	
-	/**受け取ったChatProtocolの中身を見る, GUIへ通知させる処理を追加する*/
-	public void recvChat(ChatProtocol cp){
-		Chat chat = cp.getChat();
-		System.out.println("resv:"+chat);
 	}
 
 	/**Protocolのサブクラスで梱包されたデータをサーバへ送信する*/
@@ -112,12 +103,29 @@ public class Client implements GUIListener{
 		System.out.println("send:"+game);
 	}
 	
+	/**受け取ったChatProtocolの中身を見る, GUIへ通知させる処理を追加する*/
+	public void recvChat(ChatProtocol cp){
+		Chat chat = cp.getChat();
+		System.out.println("resv:"+chat);
+	}
+	
+	/**PlayerEntryの中身を見る*/
+	public void recvPlayerEntry(PlayerEntryProtocol prot) {
+		PlayerEntry pe = prot.getPlayerEntry();
+		if(pe.isEntry()) {
+			if(pe.isFirst())guimanager.setRuleSceneFlag(true);
+			else guimanager.setRuleSceneFlag(false);
+		}
+		System.out.println("recv:"+pe);
+	}
 	
 	//Listener Method
 	@Override
 	public void joinGame(String username) {
-		this.name = username;
-		connectServer(this.SERVER_IP, 5001);
+		if(username!=null) {
+			this.name = username;
+			connectServer(this.SERVER_IP, 5001);
+		}
 	}
 
 	@Override
@@ -144,6 +152,7 @@ public class Client implements GUIListener{
 	public void usedPass(boolean pass) {
 		
 	}
+
 }
 
 
@@ -190,6 +199,7 @@ class ClientReciever extends Thread{
 			break;
 		//PlayerEntry
 		case 2:
+			owner.recvPlayerEntry((PlayerEntryProtocol)prot);
 			break;
 			
 			
