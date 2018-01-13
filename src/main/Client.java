@@ -181,6 +181,12 @@ public class Client implements GUIListener{
 		
 	}
 
+	public void recvGameStartable() {
+		// TODO 自動生成されたメソッド・スタブ
+		//RuleControllerのゲーム開始ボタンを押せるように変化させる
+		System.out.println("Startable!");
+	}
+
 }
 
 
@@ -232,6 +238,10 @@ class ClientReciever extends Thread{
 		//GameRule
 		case 3:
 			owner.recvGameRule((GameRuleProtocol)prot);
+			break;
+		//GameStartable
+		case 4:
+			owner.recvGameStartable();
 			break;
 		default:
 			break;
