@@ -8,17 +8,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 import game.*;
-
+import item.*;
 import protocol.*;
 
 public class Server implements Runnable{
 	Map<Socket, ServerThread> clients;
+	Map<Player, ServerThread> players;
 	ServerSocket serversocket;
 	
 	GameManager gamemanager;
 
 	public Server(){
 		clients = new HashMap<>();
+		players = new HashMap<>();
 		gamemanager = new GameManager();
 	}
 
@@ -58,18 +60,28 @@ public class Server implements Runnable{
 	/**接続が切れたと思われるクライアントを取除く*/
 	public void removeClient(ServerThread st){
 		clients.remove(st.client);
+		players.remove(st);
 	}
 	
 	/**Clientが最初に送るuser_nameを受け付け, gameへplayerとして登録する,　送り主へ登録結果を送信する*/
 	public void recvPlayerEntry(PlayerEntryProtocol prot, ServerThread sender) {
 		PlayerEntry pe = prot.getPlayerEntry();
 		String name = pe.getPlayer_name();
-		item.Player player = new item.Player(name);
+		int player_no = gamemanager.getPlayerCount();
+		Player player = new Player(name, player_no);
 		if(gamemanager.setPlayer(player)) {
+			players.put(player, sender);
 			pe.setEntry(true);
+			pe.setPlayer_id(player_no);
 			if(gamemanager.getPlayerCount()==1)
 				pe.setFirst(true);
-			//if(gamemanager.isPlayerCountOK())sendGameStartable();
+			if(gamemanager.isPlayerCountOK()) {
+				Player[] players = gamemanager.getPlayerList();
+				if(players!=null&&players.length>=1) {
+					ServerThread settingPlayer = this.players.get(players[0]);
+					settingPlayer.send(new Protocol(Protocol.GAME_STARTABLE));
+				}
+			}
 		}
 		else {
 			pe.setEntry(false);
@@ -92,6 +104,12 @@ public class Server implements Runnable{
 			//sender.send(sendmsg);
 		}
 	}
+	
+	public void recvGame(GameProtocol prot, ServerThread sender) {
+		//Game進行に関する情報の受け取り
+		Game game = prot.getGame();
+		
+	}
 }
 
 
@@ -102,6 +120,7 @@ public class Server implements Runnable{
 class ServerThread extends Thread{
 	Server mainserver;
 	Socket client;
+	Player player;
 	ObjectOutputStream oos;
 	ObjectInputStream ois;
 
@@ -153,9 +172,9 @@ class ServerThread extends Thread{
 		case 0:
 			mainserver.recvChat((ChatProtocol)prot, this);
 			break;
-
 		//Game
 		case 1:
+			
 			break;
 		
 		//PlayerEntry
@@ -166,7 +185,9 @@ class ServerThread extends Thread{
 		case 3:
 			mainserver.recvGameRule((GameRuleProtocol)prot, this);
 			break;
-			
+		//GameStartable
+		case 4:
+			break;
 		default:
 			break;
 		}
