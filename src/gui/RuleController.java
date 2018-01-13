@@ -40,7 +40,7 @@ public class RuleController {
 		System.out.println(tunnel);
 
 		if(listener != null) listener.registarRule(round, pass, joker, tunnel);
-		manager.nextScene("play.fxml");
+		//manager.nextScene("play.fxml");
 	}
 
 	@FXML

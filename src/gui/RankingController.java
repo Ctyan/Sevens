@@ -79,7 +79,7 @@ public class RankingController implements Initializable{
 
 	/**全員が次のラウンドへを押した場合このメソッドを呼び出して次のラウンドへ進む*/
 	public void nextRound(){
-		manager.nextScene("play.fxml");
+		//manager.nextScene("play.fxml");
 	}
 
 	@FXML
@@ -92,7 +92,7 @@ public class RankingController implements Initializable{
 	protected void exitRound(ActionEvent e){
 		System.out.println("終了");
 		listener.exitGame(true);
-		manager.nextScene("Start.fxml");
+		//manager.nextScene("Start.fxml");
 	}
 
 	/**ボタンの切り替え　次のラウンドへ➡終了*/
