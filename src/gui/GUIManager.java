@@ -14,20 +14,19 @@ public class GUIManager {
 	private static GUIManager instance = new GUIManager();
 	GUIListener listener;
 	Stage thisStage;
-	//StartController
-	boolean ruleSceneFlag = true; //ルール画面への判定
-	//RuleController
+	private boolean ruleSceneFlag = true; //ルール画面への判定
 	private int  memberNum; //参加人数
-	//PlayController
 	Map<Integer, String> playerName = new HashMap<>(); //ID　プレイヤー名
 	Map<Integer, Integer> playerCardNum = new HashMap<>(); //ID　カード枚数
 	Map<Integer, Integer> playerPassNum = new HashMap<>(); //ID　パス回数
+	Map<Integer, Integer> playerScore = new HashMap<>(); //ラウンドのスコア
 	ArrayList<String> myHand = new ArrayList<String>(); //メインプレイヤーの手札
 	private int myId; //メインID
 	private String[] rule; //ルールの詳細　順番：{"パス回数","ラウンド数","ジョーカーの有無","トンネルの有無"}
 	private boolean cardClickFlag; //カードを押せるかの判定
 	private boolean passClickFlag; //パスが押せるかの判定
 	private boolean changeButtonflag; //ランキング画面のボタンの切り替えの判定
+	private int rank; //ゲームに上がった順位
 
 	private GUIManager(){
 		instance = this;
@@ -77,6 +76,14 @@ public class GUIManager {
 		return playerPassNum;
 	}
 
+	public Map<Integer, Integer> getPlayerScore() {
+		return playerScore;
+	}
+
+	public void setPlayerScore(Map<Integer, Integer> playerScore) {
+		this.playerScore = playerScore;
+	}
+
 	public void setMyHand(ArrayList<String> myHand) {
 		this.myHand = myHand;
 	}
@@ -123,6 +130,14 @@ public class GUIManager {
 
 	public boolean getChangeButtonflag() {
 		return changeButtonflag;
+	}
+
+	public void setRank(int rank) {
+		this.rank = rank;
+	}
+
+	public int getRank() {
+		return rank;
 	}
 
 	public void setGUIListener(GUIListener listener) {
