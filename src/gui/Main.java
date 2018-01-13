@@ -15,12 +15,12 @@ public class Main extends Application {
 		try {
 			/*
 			 * Start
-			 * RuluSettings
+			 * RuleSettings
 			 * Wait
 			 * Play
 			 * Ranking
 			 */
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("Play.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("RuleSettings.fxml"));
 			Parent root = loader.load();
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());

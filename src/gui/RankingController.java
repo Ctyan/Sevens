@@ -27,7 +27,7 @@ public class RankingController implements Initializable{
 	int n=0;
 	public Label[] name,a_score,b_score,c_score,d_score,e_score,f_score,sum;
 	GUIManager manager = GUIManager.getInstance();
-	GUIListener listener;
+	GUIListener listener = manager.listener;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {

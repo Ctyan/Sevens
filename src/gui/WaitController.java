@@ -2,21 +2,20 @@ package gui;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.stage.Stage;
 
 public class WaitController {
-	Stage thisStage;
 	GUIManager manager = GUIManager.getInstance();
-	GUIListener listener;
+	GUIListener listener = manager.listener;
 
-	public void setThisStage(Stage stage){
-		thisStage = stage;
+	/**Wait画面からPlay画面の遷移の際、呼び出すメソッド*/
+	public void readyStart(){
+		manager.gameStart();
 	}
 
 	@FXML
 	protected void cancelButtonAction(ActionEvent e){
 		System.out.println("cancel");
 		manager.nextScene("Start.fxml");
-		if(listener != null) manager.listener.cancelGame(true);
+		if(listener != null) listener.cancelGame(true);
 	}
 }

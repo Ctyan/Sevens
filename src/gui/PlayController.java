@@ -58,8 +58,8 @@ public class PlayController implements Initializable {
 	//filepath
 	private String filepath = "src/gui/resources/";
 	GUIManager manager = GUIManager.getInstance();
-	GUIListener listener;
-	
+	GUIListener listener = manager.listener;
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		setArray();
@@ -122,7 +122,7 @@ public class PlayController implements Initializable {
 		anchorpane.getChildren().remove(iv);
 		updateHand(index,x);
 		boardDraw(text);
-		if(listener != null) manager.listener.sendCard(text);
+		if(listener != null) listener.sendCard(text);
 	}
 
 	public void updateHand(int index,double x){
@@ -215,14 +215,14 @@ public class PlayController implements Initializable {
 			chathbox.getChildren().remove(chat.remove(0));
 			chatCount--;
 		}
-		if(listener != null) manager.listener.sendChat(text);
+		if(listener != null) listener.sendChat(text);
 	}
 
 	@FXML
 	public void PassCount(ActionEvent e) {
 		userpassNum ++;
 		userpass.setText(String.valueOf(userpassNum));
-		if(listener != null) manager.listener.usedPass(true);
+		if(listener != null) listener.usedPass(true);
 	}
 
 }
