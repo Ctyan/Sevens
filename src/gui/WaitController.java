@@ -6,6 +6,8 @@ import javafx.stage.Stage;
 
 public class WaitController {
 	Stage thisStage;
+	GUIManager manager = GUIManager.getInstance();
+	GUIListener listener;
 
 	public void setThisStage(Stage stage){
 		thisStage = stage;
@@ -14,7 +16,7 @@ public class WaitController {
 	@FXML
 	protected void cancelButtonAction(ActionEvent e){
 		System.out.println("cancel");
-		Main.manager.minusMember();
-		Main.manager.nextScene("Start.fxml");
+		manager.nextScene("Start.fxml");
+		if(listener != null) manager.listener.cancelGame(true);
 	}
 }
