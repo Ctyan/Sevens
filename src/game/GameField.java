@@ -2,23 +2,64 @@ package game;
 
 public class GameField {
 
-	private boolean[][] cardBlocks;
+	private boolean[][] cardField;
 
 	public GameField() {
-		cardBlocks = new boolean[4][13];
+		cardField = new boolean[4][13];
+		for(boolean[] bl : cardField) {
+			for(boolean b : bl) {
+				b = false;
+			}
+		}
 	}
 
 	public boolean setCard(int t, int n) {
 		if(t<0 || 4<= t || n<0 || 13<=n) return false;
 		if(isCard(t, n)) return false;
 
-		cardBlocks[t][n] = true;
+		cardField[t][n] = true;
 		return true;
 	}
 
 	public boolean isCard(int t, int n) {
 		if(t<0 || 4<= t || n<0 || 13<=n) return false;
 
-		return cardBlocks[t][n];
+		return cardField[t][n];
+	}
+
+	public boolean isFrontCard(int t, int n) {
+		if(t<0 || 4<= t || n<0 || 13<=n) return false;
+
+		boolean front = false;
+
+		switch (n) {
+		case 12:
+			front = isCard(t, 0);
+			break;
+
+		default:
+			front = isCard(t, n+1);
+			break;
+		}
+
+		return front;
+	}
+
+	public boolean isBackCard(int t, int n) {
+		if(t<0 || 4<= t || n<0 || 13<=n) return false;
+
+		boolean back = false;
+
+		switch (n) {
+		case 0:
+			back = isCard(t, 12);
+			break;
+
+		default:
+			back = isCard(t, n-1);
+			break;
+		}
+
+		return back;
 	}
 }

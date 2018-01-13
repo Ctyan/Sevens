@@ -49,8 +49,6 @@ public class PlayController implements Initializable {
 	ArrayList<Label> chat = new ArrayList<Label>();
 	int num = 7;
 	int chatCount = 0;
-	// manager
-	GUIManager manager = new GUIManager();
 	// player test
 	String player = "a0";
 	// vplayer test
@@ -59,7 +57,9 @@ public class PlayController implements Initializable {
 	ArrayList<String> testhand = new ArrayList<String>();
 	//filepath
 	private String filepath = "src/gui/resources/";
-
+	GUIManager manager = GUIManager.getInstance();
+	GUIListener listener;
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		setArray();
@@ -122,6 +122,7 @@ public class PlayController implements Initializable {
 		anchorpane.getChildren().remove(iv);
 		updateHand(index,x);
 		boardDraw(text);
+		if(listener != null) manager.listener.sendCard(text);
 	}
 
 	public void updateHand(int index,double x){
@@ -169,7 +170,7 @@ public class PlayController implements Initializable {
 
 	private void createPlayer(String player, int userpassNum) {
 		username.setText(player);
-		userpass.setText(" パス ： " + userpassNum);
+		userpass.setText(String.valueOf(userpassNum));
 	}
 
 	// vplayer
@@ -199,10 +200,14 @@ public class PlayController implements Initializable {
 		rulehbox.getChildren().addAll(passCou, roundCou, jokeris, tunnelis);
 	}
 
-	// ActionEvent or MouseEvent
 	@FXML
-	public void StampAction1(ActionEvent e) {
-		chat.add(new Label(player + "：" + stamp1.getText()));
+	public void StampAction(ActionEvent e) {
+		String text = "";
+		if(e.getTarget().equals(stamp1)) text = stamp1.getText();
+		else if(e.getTarget().equals(stamp2)) text = stamp2.getText();
+		else if(e.getTarget().equals(stamp3)) text = stamp3.getText();
+		else if(e.getTarget().equals(stamp4)) text = stamp4.getText();
+		chat.add(new Label(player + "：" + text));
 		chat.get(chatCount).setId("chattext");
 		chathbox.getChildren().addAll(chat.get(chatCount));
 		chatCount++;
@@ -210,47 +215,14 @@ public class PlayController implements Initializable {
 			chathbox.getChildren().remove(chat.remove(0));
 			chatCount--;
 		}
-	}
-
-	@FXML
-	public void StampAction2(ActionEvent e) {
-		chat.add(new Label(player + "：" + stamp2.getText()));
-		chat.get(chatCount).setId("chattext");
-		chathbox.getChildren().addAll(chat.get(chatCount));
-		chatCount++;
-		if (chatCount > num) {
-			chathbox.getChildren().remove(chat.remove(0));
-			chatCount--;
-		}
-	}
-
-	@FXML
-	public void StampAction3(ActionEvent e) {
-		chat.add(new Label(player + "：" + stamp3.getText()));
-		chat.get(chatCount).setId("chattext");
-		chathbox.getChildren().addAll(chat.get(chatCount));
-		chatCount++;
-		if (chatCount > num) {
-			chathbox.getChildren().remove(chat.remove(0));
-			chatCount--;
-		}
-	}
-
-	@FXML
-	public void StampAction4(ActionEvent e) {
-		chat.add(new Label(player + "：" + stamp4.getText()));
-		chat.get(chatCount).setId("chattext");
-		chathbox.getChildren().addAll(chat.get(chatCount));
-		chatCount++;
-		if (chatCount > num) {
-			chathbox.getChildren().remove(chat.remove(0));
-			chatCount--;
-		}
+		if(listener != null) manager.listener.sendChat(text);
 	}
 
 	@FXML
 	public void PassCount(ActionEvent e) {
-		userpass.setText(" パス ： " + userpassNum++);
+		userpassNum ++;
+		userpass.setText(String.valueOf(userpassNum));
+		if(listener != null) manager.listener.usedPass(true);
 	}
 
 }

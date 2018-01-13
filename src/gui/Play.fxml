@@ -16,10 +16,10 @@
    <children>
       <SplitMenuButton layoutX="464.0" layoutY="10.0" mnemonicParsing="false" style="-fx-base: orange;" text="STAMP">
         <items>
-          <MenuItem fx:id="stamp1" mnemonicParsing="false" onAction="#StampAction1" text="Action 1" />
-          <MenuItem fx:id="stamp2" mnemonicParsing="false" onAction="#StampAction2" text="Action 2" />
-            <MenuItem fx:id="stamp3" mnemonicParsing="false" onAction="#StampAction3" text="Action 3" />
-            <MenuItem fx:id="stamp4" mnemonicParsing="false" onAction="#StampAction4" text="Action 4" />
+          <MenuItem fx:id="stamp1" mnemonicParsing="false" onAction="#StampAction" text="Action 1" />
+          <MenuItem fx:id="stamp2" mnemonicParsing="false" onAction="#StampAction" text="Action 2" />
+            <MenuItem fx:id="stamp3" mnemonicParsing="false" onAction="#StampAction" text="Action 3" />
+            <MenuItem fx:id="stamp4" mnemonicParsing="false" onAction="#StampAction" text="Action 4" />
         </items>
          <font>
             <Font size="14.0" />
@@ -208,7 +208,7 @@
                </children>
             </Pane>
          </children></VBox>
-      <Label fx:id="userpass" alignment="CENTER" layoutX="604.0" layoutY="455.0" prefHeight="27.0" prefWidth="117.0">
+      <Label fx:id="userpass" layoutX="668.0" layoutY="455.0" prefHeight="27.0" prefWidth="54.0">
          <font>
             <Font size="18.0" />
          </font>
@@ -244,5 +244,10 @@
             </ImageView>
          </children></AnchorPane>
       <AnchorPane fx:id="bord" layoutX="247.0" layoutY="66.0" prefHeight="360.0" prefWidth="780.0" />
+      <Label layoutX="606.0" layoutY="454.0" prefHeight="30.0" prefWidth="54.0" text="パス：">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
