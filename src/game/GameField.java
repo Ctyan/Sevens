@@ -6,9 +6,9 @@ public class GameField {
 
 	public GameField() {
 		cardField = new boolean[4][13];
-		for(boolean[] bl : cardField) {
-			for(boolean b : bl) {
-				b = false;
+		for(int t=0;t<4;t++) {
+			for(int n=0;n<13;n++) {
+				cardField[t][n] = false;
 			}
 		}
 	}
