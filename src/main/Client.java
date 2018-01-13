@@ -16,7 +16,7 @@ import protocol.GameProtocol;
 import protocol.Protocol;
 
 /**起動すると指定されたサーバへ接続します*/
-public class Client {
+public class Client implements GUIListener{
 	private static final String SERVER_IP = "localhost";
 	//TODO GUImanager, Listener, etc...
 	GUIManager guimanager;
@@ -33,15 +33,13 @@ public class Client {
 		try{
 			//reader = new BufferedReader(new InputStreamReader(System.in));
 			//System.out.println("Your name >");
-			Client client = new Client("hoge");
+			Client client = new Client();
 			//System.out.print("Server name(localhost or 133.27.....)? >");
-			
-			client.guimain.main(args);
-			
+						
 			//String serverName = SERVER_IP;
 			//client.connectServer(serverName, 5001);
 			/* */
-			
+			client.guimain.main(args);
 			//マルチコンソールチャット テスト用
 			/* */
 			while(true){
@@ -56,12 +54,19 @@ public class Client {
 
 	}
 	
-	
+	public Client() {
+		this.guimanager = new GUIManager();
+		this.guimanager.setGUIListener(this);
+		this.guimain = new gui.Main();
+		this.guimain.setGUIManger(this.guimanager);
+	}
 
 	public Client(String name){
 		this.name = name;
 		this.guimanager = new GUIManager();
+		this.guimanager.setGUIListener(this);
 		this.guimain = new gui.Main();
+		this.guimain.setGUIManger(this.guimanager);
 	}
 
 	/**指定したサーバに接続する*/
@@ -104,6 +109,18 @@ public class Client {
 	public void sendGame(Game game){
 		send(new GameProtocol(game));
 		System.out.println("send:"+game);
+	}
+	
+	//Listener Method
+	@Override
+	public void joinGame(String username) {
+		this.name = username;
+		connectServer(this.SERVER_IP, 5001);
+	}
+
+	@Override
+	public void registarRule(int round, int passNum, boolean joker, boolean tunnel) {
+		
 	}
 }
 
