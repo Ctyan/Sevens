@@ -130,7 +130,7 @@ public class Client implements GUIListener{
 
 	@Override
 	public void registarRule(int round, int passNum, boolean joker, boolean tunnel) {
-		
+		send(new GameRuleProtocol(new GameRule(round, passNum, joker, tunnel)));
 	}
 
 	@Override
@@ -151,6 +151,11 @@ public class Client implements GUIListener{
 	@Override
 	public void usedPass(boolean pass) {
 		
+	}
+
+	public void recvGameRule(GameRuleProtocol prot) {
+		GameRule gr = prot.getGameRule();
+		System.out.println("recv"+gr);
 	}
 
 }
@@ -201,8 +206,10 @@ class ClientReciever extends Thread{
 		case 2:
 			owner.recvPlayerEntry((PlayerEntryProtocol)prot);
 			break;
-			
-			
+		//GameRule
+		case 3:
+			owner.recvGameRule((GameRuleProtocol)prot);
+			break;
 		default:
 			break;
 		}
