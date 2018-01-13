@@ -44,7 +44,7 @@
             <Font size="28.0" />
          </font>
       </Label>
-      <RadioButton id="radioButton1" fx:id="radio1" layoutX="26.0" layoutY="164.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" selected="true" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="1">
+      <RadioButton id="radioButton1" fx:id="radio1" layoutX="26.0" layoutY="164.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" userData="1" selected="true" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="1">
          <font>
             <Font size="24.0" />
          </font>
@@ -52,22 +52,22 @@
             <ToggleGroup fx:id="Round" />
          </toggleGroup>
       </RadioButton>
-      <RadioButton layoutX="112.0" layoutY="164.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="3" toggleGroup="$Round">
+      <RadioButton layoutX="112.0" layoutY="164.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="3" toggleGroup="$Round" userData="3">
          <font>
             <Font size="24.0" />
          </font>
       </RadioButton>
-      <RadioButton layoutX="198.0" layoutY="164.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="5" toggleGroup="$Round">
+      <RadioButton layoutX="198.0" layoutY="164.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="5" toggleGroup="$Round" userData="5">
          <font>
             <Font size="24.0" />
          </font>
       </RadioButton>
-      <RadioButton layoutX="284.0" layoutY="164.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="7" toggleGroup="$Round">
+      <RadioButton layoutX="284.0" layoutY="164.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="7" toggleGroup="$Round" userData="7">
          <font>
             <Font size="24.0" />
          </font>
       </RadioButton>
-      <RadioButton layoutX="28.0" layoutY="286.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="1">
+      <RadioButton layoutX="28.0" layoutY="286.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="1" userData="1">
          <font>
             <Font size="24.0" />
          </font>
@@ -75,17 +75,17 @@
             <ToggleGroup fx:id="Pass" />
          </toggleGroup>
       </RadioButton>
-      <RadioButton layoutX="114.0" layoutY="286.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="2" toggleGroup="$Pass">
+      <RadioButton layoutX="114.0" layoutY="286.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="2" toggleGroup="$Pass" userData="2">
          <font>
             <Font size="24.0" />
          </font>
       </RadioButton>
-      <RadioButton id="radioButton2" fx:id="radio2" layoutX="200.0" layoutY="286.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" selected="true" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="3" toggleGroup="$Pass">
+      <RadioButton id="radioButton2" fx:id="radio2" layoutX="200.0" layoutY="286.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" selected="true" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="3" toggleGroup="$Pass" userData="3">
          <font>
             <Font size="24.0" />
          </font>
       </RadioButton>
-      <RadioButton id="radioButton3" fx:id="radio3" layoutX="28.0" layoutY="398.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" selected="true" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="あり">
+      <RadioButton id="radioButton3" fx:id="radio3" layoutX="28.0" layoutY="398.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" selected="true" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="あり" userData="true">
          <font>
             <Font size="24.0" />
          </font>
@@ -93,12 +93,12 @@
             <ToggleGroup fx:id="Joker" />
          </toggleGroup>
       </RadioButton>
-      <RadioButton layoutX="114.0" layoutY="398.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="なし" toggleGroup="$Joker">
+      <RadioButton layoutX="114.0" layoutY="398.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="なし" toggleGroup="$Joker" userData="false">
          <font>
             <Font size="24.0" />
          </font>
       </RadioButton>
-      <RadioButton id="radioButton4" fx:id="radio4" layoutX="26.0" layoutY="517.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" selected="true" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="あり">
+      <RadioButton id="radioButton4" fx:id="radio4" layoutX="26.0" layoutY="517.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" selected="true" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="あり" userData="true">
          <font>
             <Font size="24.0" />
          </font>
@@ -106,7 +106,7 @@
             <ToggleGroup fx:id="Tunnel" />
          </toggleGroup>
       </RadioButton>
-      <RadioButton layoutX="112.0" layoutY="517.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="なし" toggleGroup="$Tunnel">
+      <RadioButton layoutX="112.0" layoutY="517.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="なし" toggleGroup="$Tunnel" userData="false">
          <font>
             <Font size="24.0" />
          </font>
