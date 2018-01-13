@@ -19,6 +19,7 @@ public class Server implements Runnable{
 
 	public Server(){
 		clients = new HashMap<>();
+		gamemanager = new GameManager();
 	}
 
 	public static void main(String[] args){
@@ -59,10 +60,22 @@ public class Server implements Runnable{
 		clients.remove(st.client);
 	}
 	
-	/**Clientが最初に送るuser_nameを受け付け, gameへplayerとして登録する*/
+	/**Clientが最初に送るuser_nameを受け付け, gameへplayerとして登録する,　送り主へ登録結果を送信する*/
 	public void recvPlayerEntry(PlayerEntryProtocol prot, ServerThread sender) {
 		PlayerEntry pe = prot.getPlayerEntry();
+		String name = pe.getPlayer_name();
+		item.Player player = new item.Player(name);
+		if(gamemanager.setPlayer(player)) {
+			pe.setEntry(true);
+			if(gamemanager.getPlayerCount()==1)
+				pe.setFirst(true);
+			//if(gamemanager.isPlayerCountOK())sendGameStartable();
+		}
+		else {
+			pe.setEntry(false);
+		}
 		System.out.println("entry-player:"+pe);
+		sender.send(new PlayerEntryProtocol(pe));
 	}
 }
 
