@@ -26,7 +26,7 @@ public class GUIManager {
 	private boolean cardClickFlag; //カードを押せるかの判定
 	private boolean passClickFlag; //パスが押せるかの判定
 	private boolean changeButtonflag; //ランキング画面のボタンの切り替えの判定
-	private int rank; //ゲームに上がった順位
+	private boolean endGameFlag; //ゲームへの操作の判定
 
 	private GUIManager(){
 		instance = this;
@@ -131,13 +131,13 @@ public class GUIManager {
 	public boolean getChangeButtonflag() {
 		return changeButtonflag;
 	}
-
-	public void setRank(int rank) {
-		this.rank = rank;
+	
+	public void setEndGameFlag(boolean endGameFlag) {
+		this.endGameFlag = endGameFlag;
 	}
-
-	public int getRank() {
-		return rank;
+	
+	public boolean getEndGameFlag() {
+		return endGameFlag;
 	}
 
 	public void setGUIListener(GUIListener listener) {

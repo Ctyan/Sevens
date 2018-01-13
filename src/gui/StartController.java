@@ -25,8 +25,8 @@ public class StartController {
 			System.out.println(username);
 			if (listener != null){
 				listener.joinGame(username);
-				if (manager.getRuleSceneFlag()) manager.nextScene("RuleSettings.fxml");
-				else manager.nextScene("Wait.fxml");
+				//if (manager.getRuleSceneFlag()) manager.nextScene("RuleSettings.fxml");
+				//else manager.nextScene("Wait.fxml");
 			}
 		}
 	}
