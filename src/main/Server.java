@@ -7,12 +7,15 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
-import protocol.ChatProtocol;
-import protocol.Protocol;
+import game.*;
+
+import protocol.*;
 
 public class Server implements Runnable{
 	Map<Socket, ServerThread> clients;
 	ServerSocket serversocket;
+	
+	GameManager gamemanager;
 
 	public Server(){
 		clients = new HashMap<>();
@@ -54,6 +57,12 @@ public class Server implements Runnable{
 	/**接続が切れたと思われるクライアントを取除く*/
 	public void removeClient(ServerThread st){
 		clients.remove(st.client);
+	}
+	
+	/**Clientが最初に送るuser_nameを受け付け, gameへplayerとして登録する*/
+	public void recvPlayerEntry(PlayerEntryProtocol prot, ServerThread sender) {
+		PlayerEntry pe = prot.getPlayerEntry();
+		System.out.println("entry-player:"+pe);
 	}
 }
 
@@ -117,10 +126,14 @@ class ServerThread extends Thread{
 			mainserver.recvChat((ChatProtocol)prot, this);
 			break;
 
-			//Game
+		//Game
 		case 1:
 			break;
-
+		
+		//PlayerEntry
+		case 2:
+			mainserver.recvPlayerEntry((PlayerEntryProtocol)prot, this);
+			break;
 		default:
 			break;
 		}
