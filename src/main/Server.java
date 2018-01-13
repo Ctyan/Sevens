@@ -35,7 +35,7 @@ public class Server implements Runnable{
 				ServerThread st = new ServerThread(socket, this);
 				st.start();
 				clients.put(socket, st);
-				System.out.println("Waiting for new connection at port:10001");
+				System.out.println("Waiting for new connection at port:5001");
 			}
 		}
 		catch (IOException e) {

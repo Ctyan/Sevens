@@ -1,8 +1,8 @@
 package gui;
 
-interface GUIListener {
+public interface GUIListener {
 
-	void joinGame(String username);
+	public void joinGame(String username);
 	
-	void registarRule(int round, int passNum, boolean joker, boolean tunnel);
+	public void registarRule(int round, int passNum, boolean joker, boolean tunnel);
 }

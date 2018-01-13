@@ -24,7 +24,7 @@ public class StartController {
 			flag = false;
 		}else{
 			System.out.println(username);
-			listener.joinGame(username);
+			Main.manager.listener.joinGame(username);
 			flag = true;
 			Main.manager.plusMember();
 		}

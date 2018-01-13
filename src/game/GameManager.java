@@ -18,6 +18,7 @@ public class GameManager{
 	private PlayingCard playingCard;
 	private GamePlayable gamePlayable;
 	private int startPlayerNumber;
+	private List<Card> playCardList;
 
 	public GameManager() {
 		playerList = new Player[MAX_PLAYER_VALUE];
@@ -54,10 +55,14 @@ public class GameManager{
 		return MIN_PLAYER_VALUE <= playerCount;
 	}
 
-	public boolean setGamePlayable(int roundValue, int passValue, boolean joker, boolean tunel) {
+	public Player[] getPlayerList() {
+		return playerList;
+	}
+
+	public boolean setGamePlayable(int roundValue, int passValue, boolean joker, boolean tunnel) {
 		if(!isPlayerCountOK()) return false;
 
-		gamePlayable = new GamePlayable(roundValue, passValue, joker, tunel);
+		gamePlayable = new GamePlayable(roundValue, passValue, joker, tunnel);
 		return true;
 	}
 
@@ -66,12 +71,12 @@ public class GameManager{
 
 		// プレイカードの用意
 		playingCard = new PlayingCard(gamePlayable.isJoker());
-		List<Card> playCardList = playingCard.getCardList();
+		playCardList = playingCard.getCardList();
 
 		// カードから7を抜き出す
 		playCardList.remove(new Card(Card.SPADE_TYPE, 7));
 		playCardList.remove(new Card(Card.HEART_TYPE, 7));
-		playCardList.remove(new Card(Card.CLOVER_TYPE, 7));
+		playCardList.remove(new Card(Card.CLUB_TYPE, 7));
 		playCardList.remove(new Card(Card.DIA_TYPE, 7));
 
 		// カードをシャッフルする
@@ -81,12 +86,25 @@ public class GameManager{
 		Random r = new Random();
 		startPlayerNumber = r.nextInt() % playerCount;
 
-		//
-
 		return true;
 	}
 
 	public int getStartPlayerNumber() {
 		return startPlayerNumber;
+	}
+
+	public List<Card> getPlayerCardList(int playerNumber) {
+		if(playCardList == null) return null;
+		if(playerNumber<0 || playerCount<=playerNumber) return null;
+
+		int index = (int)(playCardList.size() / playerCount);
+		List<Card> returnList = playCardList.subList(index*playerNumber, index*(playerNumber+1)-1);
+
+		int mod = playCardList.size() - index*playerCount;
+		if(0<mod && playerNumber<mod) {
+			returnList.add(playCardList.get(index*playerCount+playerNumber));
+		}
+
+		return returnList;
 	}
 }
