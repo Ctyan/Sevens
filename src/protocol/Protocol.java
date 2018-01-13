@@ -8,7 +8,8 @@ public class Protocol implements Serializable{
 	public static int CHAT = 0,
 					  GAME = 1,
 					  PLAYER_ENTRY = 2,
-					  GAME_RULE = 3;
+					  GAME_RULE = 3,
+					  GAME_STARTABLE = 4;
 
 	public Protocol(int id){
 		Protocol_ID = id;
