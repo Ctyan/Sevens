@@ -158,6 +158,24 @@ public class Client implements GUIListener{
 		System.out.println("recv"+gr);
 	}
 
+	@Override
+	public void winGame(boolean win) {
+		// TODO 自動生成されたメソッド・スタブ
+		
+	}
+
+	@Override
+	public void nextGame(boolean next) {
+		// TODO 自動生成されたメソッド・スタブ
+		
+	}
+
+	@Override
+	public void exitGame(boolean exit) {
+		// TODO 自動生成されたメソッド・スタブ
+		
+	}
+
 }
 
 
