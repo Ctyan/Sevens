@@ -1,6 +1,9 @@
 package gui;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,10 +18,16 @@ public class GUIManager {
 	boolean ruleSceneFlag = true; //ルール画面への判定
 	//RuleController
 	private int  memberNum; //参加人数
-
-	//test
-	String[] playername = new String[] {"a1","a2","a3","a4","a5"};
-	String[] playercard = new String[] {"club1", "heart1", "spade1", "diamond1","club11"};
+	//PlayController
+	Map<Integer, String> playerName = new HashMap<>(); //ID　プレイヤー名
+	Map<Integer, Integer> playerCardNum = new HashMap<>(); //ID　カード枚数
+	Map<Integer, Integer> playerPassNum = new HashMap<>(); //ID　パス回数
+	ArrayList<String> myHand = new ArrayList<String>(); //メインプレイヤーの手札
+	private int myId; //メインID
+	private String[] rule; //ルールの詳細　順番：{"パス回数","ラウンド数","ジョーカーの有無","トンネルの有無"}
+	private boolean cardClickFlag; //カードを押せるかの判定
+	private boolean passClickFlag; //パスが押せるかの判定
+	private boolean changeButtonflag; //ランキング画面のボタンの切り替えの判定
 
 	private GUIManager(){
 		instance = this;
@@ -26,14 +35,6 @@ public class GUIManager {
 
 	public static GUIManager getInstance(){
 		return instance;
-	}
-
-	public void setThisStage(Stage stage){
-		this.thisStage = stage;
-	}
-
-	public void gameStart(){
-		this.nextScene("play.fxml");
 	}
 
 	public void setRuleSceneFlag(boolean ruleSceneFlag) {
@@ -52,20 +53,76 @@ public class GUIManager {
 		return memberNum;
 	}
 
-	public void setPlayerName(String[] playername){
-		this.playername = playername;
+	public Map<Integer, String> getPlayerName() {
+		return playerName;
 	}
 
-	public String[] getPlayerName(){
-		return this.playername;
+	public void setPlayerName(Map<Integer, String> playerName) {
+		this.playerName = playerName;
 	}
 
-	public void setPlayerCard(String[] playercard){
-		this.playercard = playercard;
+	public void setPlayerCardNum(Map<Integer, Integer> playerCardNum){
+		this.playerCardNum = playerCardNum;
 	}
 
-	public String[] getPlayerCard(){
-		return playercard;
+	public Map<Integer, Integer> getPlayerCardNum(){
+		return this.playerCardNum;
+	}
+
+	public void setPlayerPassNum(Map<Integer, Integer> playerPassNum) {
+		this.playerPassNum = playerPassNum;
+	}
+
+	public Map<Integer, Integer> getPlayerPassNum() {
+		return playerPassNum;
+	}
+
+	public void setMyHand(ArrayList<String> myHand) {
+		this.myHand = myHand;
+	}
+
+	public ArrayList<String> getMyHand() {
+		return myHand;
+	}
+
+	public void setMyId(int myId) {
+		this.myId = myId;
+	}
+
+	public int getMyId() {
+		return myId;
+	}
+
+	public void setRule(String[] rule) {
+		this.rule = rule;
+	}
+
+	public String[] getRule() {
+		return rule;
+	}
+
+	public void setCardClickFlag(boolean cardClickFlag) {
+		this.cardClickFlag = cardClickFlag;
+	}
+
+	public boolean getCardClickFlag() {
+		return cardClickFlag;
+	}
+
+	public void setPassClickFlag(boolean passClickFlag) {
+		this.passClickFlag = passClickFlag;
+	}
+
+	public boolean getPassClickFlag() {
+		return passClickFlag;
+	}
+
+	public void setChangeButtonflag(boolean changeButtonflag) {
+		this.changeButtonflag = changeButtonflag;
+	}
+
+	public boolean getChangeButtonflag() {
+		return changeButtonflag;
 	}
 
 	public void setGUIListener(GUIListener listener) {
@@ -74,6 +131,16 @@ public class GUIManager {
 
 	public GUIListener getGUIListener() {
 		return this.listener;
+	}
+
+	/**ステージのセット*/
+	public void setThisStage(Stage stage){
+		this.thisStage = stage;
+	}
+
+	/**Play画面の読み込み*/
+	public void gameStart(){
+		this.nextScene("play.fxml");
 	}
 
 	/**画面遷移のメソッド*/

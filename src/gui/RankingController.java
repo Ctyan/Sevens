@@ -23,7 +23,6 @@ public class RankingController implements Initializable{
 	public Label e_score1,e_score2,e_score3,e_score4,e_score5,e_score6,e_score7; //e_player socre
 	public Label f_score1,f_score2,f_score3,f_score4,f_score5,f_score6,f_score7; //f_player socre
 	public Label a_sum,b_sum,c_sum,d_sum,e_sum,f_sum; //player score sum
-	boolean flag = false; //changebutton
 	int n=0;
 	public Label[] name,a_score,b_score,c_score,d_score,e_score,f_score,sum;
 	GUIManager manager = GUIManager.getInstance();
@@ -31,7 +30,7 @@ public class RankingController implements Initializable{
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		if(flag) changeButton();
+		if(manager.getChangeButtonflag()) changeButton();
 		if(n==0) setArray();
 		setScore();
 		createRanking();
@@ -76,6 +75,7 @@ public class RankingController implements Initializable{
 		manager.nextScene("Start.fxml");
 	}
 
+	/**ボタンの切り替え　次のラウンドへ➡終了*/
 	public void changeButton(){
 		button1.setVisible(false);
 		button2.setVisible(true);

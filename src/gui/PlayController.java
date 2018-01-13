@@ -4,6 +4,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
@@ -21,18 +24,18 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 public class PlayController implements Initializable {
+	GUIManager manager = GUIManager.getInstance();
+	GUIListener listener = manager.listener;
 	public AnchorPane board; // ボード
-	public AnchorPane bord; // ボード
 	public VBox vbox; // 他プレイヤーの表示ボックス
-	public AnchorPane anchorpane; // anchorpane
-	// player
-	public Label username;
-	public Label userpass;
-	int userpassNum = 0;
-	// player hand
+	public AnchorPane anchorpane; // 全体パネル
+	private String filepath = "src/gui/resources/";	//filepath
+	// card image
 	ArrayList<ImageView> imageview = new ArrayList<ImageView>();
-	ArrayList<Image> image = new ArrayList<Image>();
-	// vplayer用vbox
+	//player
+	public Label myPass;
+	public Label myName;
+	// vplayerの表示枠
 	public Pane[] vPane;
 	public Pane vpane1, vpane2, vpane3, vpane4, vpane5;
 	public Label[] vName;
@@ -47,50 +50,70 @@ public class PlayController implements Initializable {
 	public HBox chathbox;
 	public MenuItem stamp1, stamp2, stamp3, stamp4;
 	ArrayList<Label> chat = new ArrayList<Label>();
-	int num = 7;
-	int chatCount = 0;
-	// player test
-	String player = "a0";
-	// vplayer test
-	int passNum = 0;
-	ArrayList<String> testname = new ArrayList<String>();
-	ArrayList<String> testhand = new ArrayList<String>();
-	//filepath
-	private String filepath = "src/gui/resources/";
-	GUIManager manager = GUIManager.getInstance();
-	GUIListener listener = manager.listener;
+	private int chatCount = 0;
+	//all player status
+	Map<Integer, String> playerName = new HashMap<>(); //ID　プレイヤー名
+	Map<Integer, Integer> playerCardNum = new HashMap<>(); //ID　カード枚数
+	Map<Integer, Integer> playerPassNum = new HashMap<>(); //ID　パス回数
+	ArrayList<String> myHand = new ArrayList<String>(); //プレイヤーの手札
+	List<Integer> listId = new ArrayList<Integer>(); //プレイヤーIDのリスト
+	int myId; //メインプレイヤーのID
+	int memberNum; //　全体の人数
+	String[] rule; //ルールの詳細
+
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		setArray();
-		createVPlayer(5, testname, testhand, passNum);
-		createHand(testhand);
-		createPlayer(player, userpassNum);
-		createRule("3", "1/5", "あり", "あり");
+		setArray(); //変数、配列の初期化
+		createVPlayer(); //vplayerの名前、カード枚数、パス回数の表示
+		createPlayerHand(); //playerの手札表示
+		createPlayer(); //playerの名前、パス回数の表示
+		createRule(); //ルールの表示
 	}
 
 	public void setArray() {
-		for (String name : manager.getPlayerName()) {
-			testname.add(name);
-		}
-		for (String hand : manager.getPlayerCard()) {
-			testhand.add(hand);
+    	//all player status
+		playerName = manager.getPlayerName();
+    	playerCardNum = manager.getPlayerCardNum();
+    	playerPassNum = manager.getPlayerPassNum();
+    	for(Integer id : playerName.keySet()) listId.add(id);
+    	//vplayer status
+    	vPane = new Pane[] { vpane1, vpane2, vpane3, vpane4, vpane5 };
+		vName = new Label[] { vname1, vname2, vname3, vname4, vname5 };
+		vCard = new Label[] { vcard1, vcard2, vcard3, vcard4, vcard5 };
+		vPass = new Label[] { vpass1, vpass2, vpass3, vpass4, vpass5 };
+		//player hand
+		myHand = manager.getMyHand();
+		myId = manager.getMyId();
+		memberNum = manager.getMemberNum();
+		rule = manager.getRule();
+	}
+
+    //vplayer
+	private void createVPlayer() {
+		int i = 0;
+		for(Integer id : listId){
+			if(id == myId) continue;
+			vPane[i].setVisible(true);
+			vName[i].setText(playerName.get(id));
+			vCard[i].setText(String.valueOf(playerCardNum.get(id)));
+			vPass[i].setText(String.valueOf(playerPassNum.get(id)));
+			i ++;
 		}
 	}
 
-	// player
-	public void createHand(ArrayList<String> testhand) {
+	//player
+	private void createPlayerHand() {
 		Image cardImage = null;
 		ImageView iv = null;
 		Lighting lighting = new Lighting();
 		double x = 262;
 		double y = 507;
-		//spade heart club diamond
-		String filepath = "src/gui/resources/";
+		int i = 0;
 
-		for (int i = 0; i < testhand.size(); i++) {
+		for (String hand : myHand) {
 			try {
-				cardImage = new Image(new FileInputStream(filepath + testhand.get(i) + ".gif"));
+				cardImage = new Image(new FileInputStream(filepath + hand + ".gif"));
 			} catch (FileNotFoundException e) {
 				// TODO 自動生成された catch ブロック
 				e.printStackTrace();
@@ -106,15 +129,37 @@ public class PlayController implements Initializable {
 			anchorpane.getChildren().addAll(imageview.get(i));
 			x += 40;
 			imageview.get(i).setOnMouseClicked((MouseEvent e) -> {
-				//System.out.println(e);
-				System.out.println(e.getSource());
-				removeCard((ImageView)e.getSource());
+				if(manager.getCardClickFlag()){
+					System.out.println(e.getSource());
+					removeCard((ImageView)e.getSource());
+				}
 			});
 		}
 	}
 
+	private void createPlayer() {
+		String userName = playerName.get(myId);
+		int userPassNum = playerPassNum.get(myId);
+		myName.setText(userName);
+		myPass.setText(String.valueOf(userPassNum));
+	}
+
+	// Rule
+	private void createRule() {
+		Label passCou = new Label("パス制限：" + rule[0]+ "回");
+		passCou.setId("ruletext");
+		Label roundCou = new Label("Round：" + rule[1]);
+		roundCou.setId("ruletext");
+		Label jokeris = new Label("ジョーカー：" + rule[2]);
+		jokeris.setId("ruletext");
+		Label tunnelis = new Label("トンネル：" + rule[3]);
+		tunnelis.setId("ruletext");
+		rulehbox.getChildren().addAll(passCou, roundCou, jokeris, tunnelis);
+	}
+
+	/**選択された手札の削除するメソッド*/
 	public void removeCard(ImageView iv){
-		String text = testhand.remove(imageview.indexOf(iv));
+		String text = myHand.remove(imageview.indexOf(iv));
 		System.out.println("remove"+text);
 		int index = imageview.indexOf(iv);
 		double x = imageview.get(index).getLayoutX();
@@ -125,7 +170,8 @@ public class PlayController implements Initializable {
 		if(listener != null) listener.sendCard(text);
 	}
 
-	public void updateHand(int index,double x){
+	/**手札を再描画するメソッド*/
+	public void updateHand(int index, double x){
 		double newX = x;
 		for(int i=0; i<imageview.size()-index; i++){
 			imageview.get(index+i).setLayoutX(newX);
@@ -133,6 +179,7 @@ public class PlayController implements Initializable {
 		}
 	}
 
+	/**選択されたカードをボードに表示するメソッド*/
 	public void boardDraw(String text){
 		String mark = text.replaceFirst("[1-9]+", "");
 		String number = text.replaceFirst("[a-z]+", "");
@@ -168,38 +215,6 @@ public class PlayController implements Initializable {
 		board.getChildren().addAll(boardIv);
 	}
 
-	private void createPlayer(String player, int userpassNum) {
-		username.setText(player);
-		userpass.setText(String.valueOf(userpassNum));
-	}
-
-	// vplayer
-	public void createVPlayer(int member, ArrayList<String> testname, ArrayList<String> testhand, int passNum) {
-		vPane = new Pane[] { vpane1, vpane2, vpane3, vpane4, vpane5 };
-		vName = new Label[] { vname1, vname2, vname3, vname4, vname5 };
-		vCard = new Label[] { vcard1, vcard2, vcard3, vcard4, vcard5 };
-		vPass = new Label[] { vpass1, vpass2, vpass3, vpass4, vpass5 };
-		for (int i = 0; i < member; i++) {
-			vPane[i].setVisible(true);
-			vName[i].setText(testname.get(i));
-			vCard[i].setText(String.valueOf(testhand.size()));
-			vPass[i].setText(String.valueOf(passNum));
-		}
-	}
-
-	// Rule
-	private void createRule(String pass, String round, String joker, String tunnel) {
-		Label passCou = new Label("パス制限：" + pass + "回");
-		passCou.setId("ruletext");
-		Label roundCou = new Label("Round：" + round);
-		roundCou.setId("ruletext");
-		Label jokeris = new Label("ジョーカー：" + joker);
-		jokeris.setId("ruletext");
-		Label tunnelis = new Label("トンネル：" + tunnel);
-		tunnelis.setId("ruletext");
-		rulehbox.getChildren().addAll(passCou, roundCou, jokeris, tunnelis);
-	}
-
 	@FXML
 	public void StampAction(ActionEvent e) {
 		String text = "";
@@ -207,11 +222,11 @@ public class PlayController implements Initializable {
 		else if(e.getTarget().equals(stamp2)) text = stamp2.getText();
 		else if(e.getTarget().equals(stamp3)) text = stamp3.getText();
 		else if(e.getTarget().equals(stamp4)) text = stamp4.getText();
-		chat.add(new Label(player + "：" + text));
+		chat.add(new Label(playerName.get(myId) + "：" + text));
 		chat.get(chatCount).setId("chattext");
 		chathbox.getChildren().addAll(chat.get(chatCount));
 		chatCount++;
-		if (chatCount > num) {
+		if (chatCount > 7) {
 			chathbox.getChildren().remove(chat.remove(0));
 			chatCount--;
 		}
@@ -220,9 +235,11 @@ public class PlayController implements Initializable {
 
 	@FXML
 	public void PassCount(ActionEvent e) {
-		userpassNum ++;
-		userpass.setText(String.valueOf(userpassNum));
-		if(listener != null) listener.usedPass(true);
+		if(manager.getPassClickFlag()){
+			if(listener != null) listener.usedPass(true);
+			int userPassNum = playerPassNum.get(myId);
+			myPass.setText(String.valueOf(userPassNum));
+		}
 	}
 
 }
