@@ -1,6 +1,7 @@
 package gui;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -8,7 +9,7 @@ import javafx.stage.Stage;
 
 
 public class Main extends Application {
-	private GUIManager manager;
+	private GUIManager manager = GUIManager.getInstance();
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -20,12 +21,11 @@ public class Main extends Application {
 			 * Play
 			 * Ranking
 			 */
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("RuleSettings.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("Start.fxml"));
 			Parent root = loader.load();
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			//画面遷移に必要
-			manager = GUIManager.getInstance();
 			manager.setThisStage(primaryStage);
 			//表示
 			primaryStage.setScene(scene);
@@ -33,6 +33,12 @@ public class Main extends Application {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void nextScene(String scene) {
+		Platform.runLater(() -> {
+			manager.nextScene(scene);
+		});
 	}
 
 	public static void main(String[] args) {
@@ -42,4 +48,5 @@ public class Main extends Application {
 	public void setGUIManger(GUIManager m) {
 		manager = m;
 	}
+
 }
