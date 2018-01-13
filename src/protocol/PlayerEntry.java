@@ -40,7 +40,7 @@ public class PlayerEntry implements Serializable{
 	
 	@Override
 	public String toString() {
-		return this.player_name+", Entry="+isEntry+", First="+isFirst;
+		return this.player_name+", ID="+player_id+", Entry="+isEntry+", First="+isFirst;
 	}
 
 	public Integer getPlayer_id() {
