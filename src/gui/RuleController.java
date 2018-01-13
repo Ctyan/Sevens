@@ -1,5 +1,6 @@
 package gui;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -24,7 +25,9 @@ public class RuleController {
 
 	/**ゲーム開始ボタンを押せるようにするメソッド*/
 	public void changeButton(){
-		startButton.setDisable(true);;
+		Platform.runLater(() -> {
+			startButton.setDisable(true);
+		});
 	}
 
 	@FXML
