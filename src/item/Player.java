@@ -1,19 +1,18 @@
 package item;
 
-import java.util.Random;
-
 public class Player {
 
 	private String userName;
 	private int playerID;
 
 	private int pass;
+	private boolean endGameFlag;
 
-	public Player(String userName) {
-		Random r = new Random();
+	public Player(String userName, int playerID) {
 		this.userName = userName;
-		playerID = r.hashCode();
+		this.playerID = playerID;
 		pass = 0;
+		endGameFlag = false;
 	}
 
 	public String getUserName() {
@@ -30,5 +29,13 @@ public class Player {
 
 	public void doPass() {
 		pass++;
+	}
+
+	public void endGame() {
+		endGameFlag = true;
+	}
+
+	public boolean getEndGameFlag() {
+		return endGameFlag;
 	}
 }
