@@ -5,25 +5,29 @@ import java.util.List;
 import java.util.Random;
 
 import item.Card;
+import item.Player;
 import item.PlayingCard;
-import player.Player;
 
 public class GameManager{
+
+	// Cardクラスのみ1から数え上げ
 
 	private final int MAX_PLAYER_VALUE = 6;
 	private final int MIN_PLAYER_VALUE = 3;
 
-	private Player[] playerList;
-	private int playerCount;
 	private PlayingCard playingCard;
 	private GamePlayable gamePlayable;
-	private int startPlayerNumber;
+
+	private int playerCount;
+	private int thisTurnPlayerNumber;
+
+	private Player[] playerList;
 	private List<Card> playCardList;
 
 	public GameManager() {
 		playerList = new Player[MAX_PLAYER_VALUE];
 		playerCount = 0;
-		startPlayerNumber = -1;
+		thisTurnPlayerNumber = -1;
 	}
 
 	public boolean setPlayer(Player player) {
@@ -66,6 +70,10 @@ public class GameManager{
 		return true;
 	}
 
+	public GamePlayable getGamePlayable() {
+		return gamePlayable;
+	}
+
 	public boolean gameStart() {
 		if(gamePlayable == null) return false;
 
@@ -84,13 +92,21 @@ public class GameManager{
 
 		// 開始プレイヤーを決める
 		Random r = new Random();
-		startPlayerNumber = r.nextInt() % playerCount;
+		thisTurnPlayerNumber = r.nextInt() % playerCount;
 
 		return true;
 	}
 
-	public int getStartPlayerNumber() {
-		return startPlayerNumber;
+	public int getThisTurnPlayerNumber() {
+		return thisTurnPlayerNumber % playerCount;
+	}
+
+	public int nextThisTurnPlayerNumber() {
+		return ++thisTurnPlayerNumber % playerCount;
+	}
+
+	public int getHowManyTurn() {
+		return (thisTurnPlayerNumber - getThisTurnPlayerNumber()) / playerCount;
 	}
 
 	public List<Card> getPlayerCardList(int playerNumber) {
@@ -106,5 +122,32 @@ public class GameManager{
 		}
 
 		return returnList;
+	}
+
+	public int getRoundValue() {
+		return gamePlayable.getRoundValue();
+	}
+
+	public boolean isRound(int r) {
+		return gamePlayable.isRound(r);
+	}
+
+	public boolean setCard(Card card) {
+		if(gamePlayable.canSetCard(card)) {
+			return gamePlayable.setCard(card);
+		}
+		return false;
+	}
+
+	public int getPassValue() {
+		return gamePlayable.getPassValue();
+	}
+
+	public boolean doPass(Player p) {
+		if(gamePlayable.isPass(p.getPass())) {
+			p.doPass();
+			return true;
+		}
+		return false;
 	}
 }
