@@ -19,12 +19,12 @@ public class Main extends Application {
 			 * Play
 			 * Ranking
 			 */
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("Play.fxml"));
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("Start.fxml"));
 			Parent root = loader.load();
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			//画面遷移に必要
-			manager = new GUIManager();
+			//manager = new GUIManager();
 			manager.setThisStage(primaryStage);
 			//表示
 			primaryStage.setScene(scene);
@@ -36,5 +36,9 @@ public class Main extends Application {
 
 	public static void main(String[] args) {
 		launch(args);
+	}
+	
+	public void setGUIManger(GUIManager m) {
+		manager = m;
 	}
 }

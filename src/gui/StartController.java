@@ -10,6 +10,7 @@ public class StartController {
 	public TextField text;
 	boolean flag = false;
 	Alert alert = new Alert(AlertType.INFORMATION);
+	GUIListener listener;
 
 	@FXML
 	protected void StartGame(ActionEvent e){
@@ -23,6 +24,7 @@ public class StartController {
 			flag = false;
 		}else{
 			System.out.println(username);
+			Main.manager.listener.joinGame(username);
 			flag = true;
 			Main.manager.plusMember();
 		}
@@ -33,5 +35,13 @@ public class StartController {
 				Main.manager.nextScene("Wait.fxml");
 			}
 		}
+	}
+
+	public GUIListener getListener() {
+		return listener;
+	}
+
+	public void setListener(GUIListener listener) {
+		this.listener = listener;
 	}
 }
