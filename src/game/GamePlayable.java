@@ -47,17 +47,14 @@ public class GamePlayable{
 		int type = card.getType()-1;
 		int number = card.getNumber()-1;
 
-		if(tunnel || number != 0) {
-			gameField.isCard(type, number+1);
+		if(gameField.isFrontCard(type, number) || gameField.isBackCard(type, number)) {
+			return true;
 		}
 
-		if(tunnel || number != 12) {
-			gameField.isCard(type, number+1);
-		}
-		// 途中！！！
+		return false;
+	}
 
-
-
-		return joker;
+	public boolean setCard(Card card) {
+		return gameField.setCard(card.getType(), card.getNumber());
 	}
 }
