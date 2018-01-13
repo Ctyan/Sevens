@@ -48,5 +48,7 @@ public class GameRule implements Serializable{
 		this.tunnel = tunnel;
 	}
 	
-	
+	public String toString() {
+		return "Round="+this.round+", Pass="+this.pass+", Joker="+this.joker+", Tunnel="+this.tunnel;
+	}
 }
