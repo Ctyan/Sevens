@@ -12,17 +12,14 @@ public class Ranking {
 		bottomCount = playerValue-1;
 	}
 
-	public boolean registerWinPlayer(Player p) {
+	public boolean registerPlayer(Player p, boolean win) {
 		if(bottomCount <= topCount) return false;
 
-		ranking[topCount++] = p;
-		return true;
-	}
-
-	public boolean registerLoserPlayer(Player p) {
-		if(bottomCount <= topCount) return false;
-
-		ranking[bottomCount++] = p;
+		if(win) {
+			ranking[topCount++] = p;
+		}else{
+			ranking[bottomCount--] = p;
+		}
 		return true;
 	}
 

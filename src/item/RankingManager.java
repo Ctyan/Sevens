@@ -10,7 +10,7 @@ public class RankingManager {
 		rankingList = new ArrayList<>();
 	}
 
-	public void setRanking(Ranking r) {
+	public void addRanking(Ranking r) {
 		rankingList.add(r);
 	}
 
