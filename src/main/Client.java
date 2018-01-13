@@ -8,13 +8,15 @@ import java.net.Socket;
 
 import gui.*;
 import protocol.*;
-
+import item.*;
 
 /**起動すると指定されたサーバへ接続します*/
 public class Client implements GUIListener{
 	private static final String SERVER_IP = "localhost";
 	private static final int SERVER_PORT = 5001;
 	//TODO GUImanager, Listener, etc...
+	Player me;
+	
 	GUIManager guimanager;
 	gui.Main guimain;
 	
@@ -113,8 +115,10 @@ public class Client implements GUIListener{
 	public void recvPlayerEntry(PlayerEntryProtocol prot) {
 		PlayerEntry pe = prot.getPlayerEntry();
 		if(pe.isEntry()) {
-			if(pe.isFirst())guimanager.setRuleSceneFlag(true);
-			else guimanager.setRuleSceneFlag(false);
+			guimanager.setMyId(pe.getPlayer_id());
+			if(pe.isFirst()) {
+				guimain.nextScene("RuleSettings.fxml");
+			}
 		}
 		System.out.println("recv:"+pe);
 	}
@@ -135,7 +139,8 @@ public class Client implements GUIListener{
 
 	@Override
 	public void cancelGame(boolean cancel) {
-		
+		guimanager.nextScene("Start.fxml");
+		//send():取り消したことをサーバへ通知
 	}
 
 	@Override
