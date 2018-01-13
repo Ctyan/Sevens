@@ -6,7 +6,8 @@ public class Protocol implements Serializable{
 	private static final long serialVersionUID = 1861050339906354967L;
 	private Integer Protocol_ID;
 	public static int CHAT = 0,
-					  GAME = 1;
+					  GAME = 1,
+					  PLAYER_ENTRY = 2;
 
 	public Protocol(int id){
 		Protocol_ID = id;
