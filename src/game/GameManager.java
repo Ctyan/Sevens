@@ -3,6 +3,7 @@ package game;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 
 import item.Card;
 import item.Player;
@@ -25,8 +26,7 @@ public class GameManager{
 	private Player[] playerList;
 	private List<Card> playCardList;
 
-	public GameManager(Ranking ranking) {
-		this.ranking = ranking;
+	public GameManager() {
 		playerList = new Player[MAX_PLAYER_VALUE];
 		playerCount = 0;
 		thisTurnPlayerNumber = -1;
@@ -43,13 +43,13 @@ public class GameManager{
 	}
 
 	/**指定番目のプレイヤーの削除*/
-	public boolean deleatePlayer(int n) {
+	public boolean removePlayer(int n) {
 		if(n<0 || MAX_PLAYER_VALUE<=n) return false;
 
 		if(n == MAX_PLAYER_VALUE-1) {
 			playerList[n] = null;
 		}else{
-			System.arraycopy(playerList, n+1, playerList, n, MAX_PLAYER_VALUE-n);
+			System.arraycopy(playerList, n, playerList, n-1, MAX_PLAYER_VALUE-n);
 		}
 		playerCount--;
 		return true;
@@ -84,7 +84,7 @@ public class GameManager{
 	}
 
 	/**ゲーム開始手続き*/
-	public boolean gameStart() {
+	public boolean gameStart(Ranking ranking) {
 		if(gamePlayable == null) return false;
 
 		/**プレイカードの用意*/
@@ -103,6 +103,8 @@ public class GameManager{
 		/**開始プレイヤーを決める*/
 		Random r = new Random();
 		thisTurnPlayerNumber = r.nextInt() % playerCount;
+
+		this.ranking = ranking;
 
 		return true;
 	}
@@ -138,8 +140,8 @@ public class GameManager{
 		/*
 		 * カードリストをプレイヤー人数の倍数で区切る
 		 * 余りを先頭から順に1枚ずつ配る
-		 * <---1---><---2---><---3---><---4---><---5--->1234
-		 * 12345689TJQK12345689TJQK12345689TJQK12345689TJQKj
+		 * <---1---><---2---><---3---><---4---><---5--->123451234 |
+		 * 12345689TJQK12345689TJQK12345689TJQK12345689TJ QK  j   |
 		 * 結果=>5番目だけ9枚になる。
 		 */
 		if(playCardList == null) return null;
@@ -263,12 +265,100 @@ public class GameManager{
 					// 置けた場合カードを手持ちから消す(null)
 					playCardList.set(playCardList.indexOf(card), null);
 				}
-				// ジョーカーのとこのカードを強制的に捨てる
-				playCardList.set(playCardList.indexOf(new Card(card.getType(), jokerN)), null);
-				// *ジョーカーを今のプレイヤーから別のプレイヤーに渡す処理
+				// ジョーカーを捨てる
+				Card jokerCard = new Card(Card.JOKER_TYPE, Card.JOKER_NUMBER);
+				playCardList.set(playCardList.indexOf(jokerCard), null);
+				// ジョーカーのとこのカードをジョーカーに差し替える
+				playCardList.set(playCardList.indexOf(new Card(card.getType(), jokerN)), jokerCard);
 			}
 		}else{
 			// ありえない状態の場合
+		}
+	}
+
+	// デモ
+	public static void main(String[] args) {
+		GameManager gameManager = new GameManager();
+		System.out.println("GameManagerを作成しました。");
+
+		Scanner scan = new Scanner(System.in);
+		String scanbuf;
+		int id=0;
+		while (true) {
+			System.out.println("ユーザーネームを入力して下さい。");
+			scanbuf = scan.nextLine();
+			gameManager.setPlayer(new Player(scanbuf, id++));
+			System.out.println("キャンセルするユーザーはいますか？");
+			scanbuf = scan.nextLine();
+			if(scanbuf.equals("y")) {
+				System.out.println("キャンセルするユーザー番号は？");
+				scanbuf = scan.nextLine();
+				gameManager.removePlayer(Integer.valueOf(scanbuf));
+			}
+			System.out.println("登録を続けるか？");
+			scanbuf = scan.nextLine();
+			if(scanbuf.equals("n")) {
+				if(gameManager.isPlayerCountOK()) {
+					break;
+				}
+			}
+		}
+
+		System.out.println("プレイヤー人数："+gameManager.getPlayerCount());
+		Player[] playerList = gameManager.getPlayerList();
+		for(Player p : playerList) {
+			if(p==null) continue;
+			System.out.println("プレイヤーの名前："+p.getUserName());
+		}
+
+
+		int r=0, p=0;
+		boolean j=false, t=false;
+		System.out.println("ラウンド数は？");
+		scanbuf = scan.nextLine();
+		r = Integer.valueOf(scanbuf);
+		System.out.println("パス回数は？");
+		scanbuf = scan.nextLine();
+		p = Integer.valueOf(scanbuf);
+		System.out.println("ジョーカーはあり？");
+		scanbuf = scan.nextLine();
+		if(scanbuf.equals("y")) {
+			j=true;
+		}
+		System.out.println("トンネルはあり？");
+		scanbuf = scan.nextLine();
+		if(scanbuf.equals("y")) {
+			t=true;
+		}
+		System.out.println("ラウンド数："+r+"　パス回数："+p+"　ジョーカー："+j+"　トンネル："+t);
+		gameManager.setGamePlayable(r, p, j, t);
+
+		Ranking ranking = new Ranking(gameManager.getPlayerCount());
+		gameManager.gameStart(ranking);
+
+		List<Card> l;
+		for(int pn=0;pn<gameManager.getPlayerCount();pn++) {
+			System.out.println("プレイヤー番号："+pn+" の "+playerList[pn].getUserName()+" の手札");
+			l = gameManager.getPlayerCardList(pn);
+			boolean[][] cardField = new boolean[4][13];
+			for(int t_=0;t_<4;t_++) {
+				for(int n=0;n<13;n++) {
+					cardField[t_][n] = false;
+				}
+			}
+			for(Card c : l) {
+				cardField[c.getType()-1][c.getNumber()-1] = true;
+			}
+			for(int tt=0;tt<4;tt++) {
+				for(int nn=0;nn<13;nn++) {
+					if(cardField[tt][nn]) {
+						System.out.print("*");
+					}else{
+						System.out.print(" ");
+					}
+				}
+				System.out.println();
+			}
 		}
 	}
 }

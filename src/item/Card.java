@@ -10,10 +10,10 @@ public class Card {
 	public final static int JOKER_NUMBER = 0;
 	public final static int JOKER_TYPE = 0;
 
-	private int cardNumber;
 	private int cardType;
+	private int cardNumber;
 
-	public Card(int cardNumber, int cardType) {
+	public Card(int cardType, int cardNumber) {
 		this.cardNumber = cardNumber;
 		this.cardType = cardType;
 	}
@@ -24,5 +24,12 @@ public class Card {
 
 	public int getType() {
 		return cardType;
+	}
+
+	public boolean equal(Card card) {
+		if(this.cardType == card.cardType && this.cardNumber == card.cardNumber) {
+			return true;
+		}
+		return false;
 	}
 }
