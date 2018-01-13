@@ -60,7 +60,8 @@ public class Server implements Runnable{
 	/**接続が切れたと思われるクライアントを取除く*/
 	public void removeClient(ServerThread st){
 		clients.remove(st.client);
-		players.remove(st);
+		gamemanager.removePlayer(st.player.getPlayerID());
+		players.remove(st.player);
 	}
 	
 	/**Clientが最初に送るuser_nameを受け付け, gameへplayerとして登録する,　送り主へ登録結果を送信する*/
@@ -71,6 +72,7 @@ public class Server implements Runnable{
 		Player player = new Player(name, player_no);
 		if(gamemanager.setPlayer(player)) {
 			players.put(player, sender);
+			sender.player=player;
 			pe.setEntry(true);
 			pe.setPlayer_id(player_no);
 			if(gamemanager.getPlayerCount()==1)
