@@ -9,7 +9,7 @@
 
 <AnchorPane prefHeight="700.0" prefWidth="1100.0" style="-fx-background-color: #EEFFFF;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.RuleController">
    <children>
-      <Button layoutX="967.0" layoutY="646.0" mnemonicParsing="false" onAction="#okButtonAction" prefHeight="39.0" prefWidth="119.0" style="-fx-base: #D7EEFF;" text="ゲーム開始">
+      <Button fx:id="startButton" disable="true" layoutX="967.0" layoutY="646.0" mnemonicParsing="false" onAction="#okButtonAction" prefHeight="39.0" prefWidth="119.0" style="-fx-base: #D7EEFF;" text="ゲーム開始">
          <font>
             <Font size="18.0" />
          </font>
@@ -44,7 +44,7 @@
             <Font size="28.0" />
          </font>
       </Label>
-      <RadioButton id="radioButton1" fx:id="radio1" layoutX="26.0" layoutY="164.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" userData="1" selected="true" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="1">
+      <RadioButton id="radioButton1" fx:id="radio1" layoutX="26.0" layoutY="164.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="86.0" selected="true" style="-fx-background-color: #D7EEFF; -fx-border-color: black;" text="1" userData="1">
          <font>
             <Font size="24.0" />
          </font>
