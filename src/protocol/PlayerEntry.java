@@ -12,11 +12,6 @@ public class PlayerEntry implements Serializable{
 		this.player_name = player_name;
 	}
 	
-	@Override
-	public String toString() {
-		return this.player_name;
-	}
-
 	public String getPlayer_name() {
 		return player_name;
 	}
@@ -41,5 +36,9 @@ public class PlayerEntry implements Serializable{
 		this.isFirst = isFirst;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return this.player_name+", Entry="+isEntry+", First="+isFirst;
+	}
+
 }
