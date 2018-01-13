@@ -8,16 +8,13 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import gui.*;
+import protocol.*;
 
-import protocol.Chat;
-import protocol.ChatProtocol;
-import protocol.Game;
-import protocol.GameProtocol;
-import protocol.Protocol;
 
 /**起動すると指定されたサーバへ接続します*/
 public class Client implements GUIListener{
 	private static final String SERVER_IP = "localhost";
+	private static final int SERVER_PORT = 5001;
 	//TODO GUImanager, Listener, etc...
 	GUIManager guimanager;
 	gui.Main guimain;
@@ -35,7 +32,6 @@ public class Client implements GUIListener{
 			//System.out.println("Your name >");
 			Client client = new Client();
 			//System.out.print("Server name(localhost or 133.27.....)? >");
-						
 			//String serverName = SERVER_IP;
 			//client.connectServer(serverName, 5001);
 			/* */
@@ -78,6 +74,9 @@ public class Client implements GUIListener{
 			oos = new ObjectOutputStream(socket.getOutputStream());
 			ois = new ObjectInputStream(socket.getInputStream());
 			new ClientReciever(ois, this).start();
+			
+			//接続後, user_nameを送る
+			send(new PlayerEntryProtocol(new PlayerEntry(this.name)));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -110,6 +109,7 @@ public class Client implements GUIListener{
 		send(new GameProtocol(game));
 		System.out.println("send:"+game);
 	}
+	
 	
 	//Listener Method
 	@Override
@@ -162,11 +162,15 @@ class ClientReciever extends Thread{
 		case 0:
 			owner.recvChat((ChatProtocol)prot);
 			break;
-			//Game
+		//Game
 		case 1:
 
 			break;
-
+		//PlayerEntry
+		case 2:
+			break;
+			
+			
 		default:
 			break;
 		}
