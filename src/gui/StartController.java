@@ -1,5 +1,6 @@
 package gui;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -25,6 +26,7 @@ public class StartController {
 			System.out.println(username);
 			if (listener != null){
 				listener.joinGame(username);
+				manager.nextScene("Wait.fxml");
 				//if (manager.getRuleSceneFlag()) manager.nextScene("RuleSettings.fxml");
 				//else manager.nextScene("Wait.fxml");
 			}

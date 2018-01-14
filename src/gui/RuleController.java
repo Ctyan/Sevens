@@ -1,5 +1,6 @@
 package gui;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -23,8 +24,11 @@ public class RuleController {
 	public Button startButton;
 
 	/**ゲーム開始ボタンを押せるようにするメソッド*/
-	public void changeButton(){
-		startButton.setDisable(true);;
+	public void changeButton(boolean able){
+		Platform.runLater(() -> {
+			startButton.setDisable(!able);
+			System.out.println("ChangeStartableButton!");
+		});
 	}
 
 	@FXML

@@ -1,5 +1,6 @@
 package gui;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
@@ -18,4 +19,6 @@ public class WaitController {
 		//manager.nextScene("Start.fxml");
 		if(listener != null) listener.cancelGame(true);
 	}
+	
+	
 }
