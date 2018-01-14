@@ -186,11 +186,14 @@ public class GUIManager {
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			thisStage.setScene(scene);
 			thisStage.show();
+			//RuleControllerのchangeButtonを使うために必要
+			if(nextScene.equals("RuleSettings.fxml"))
+				Main.ruleCon = loader.getController();
 		}
 		catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-
+	
 }
 
