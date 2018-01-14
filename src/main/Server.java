@@ -148,27 +148,51 @@ public class Server implements Runnable{
 		GameRule gr = prot.getGameRule();
 		boolean isPlayable = gamemanager.setGamePlayable(gr.getRound(), gr.getPass(), gr.isJoker(), gr.isTunnel());
 		if(isPlayable) {
+			//送られてきたGameRuleをすぐに全ユーザに通知
+			for(ServerThread st: clients.values()) {
+				st.send(prot);
+			}
+			
 			Ranking ranking = new Ranking(gamemanager.getPlayerCount());
-			//Start
+			//Start GameStarterKitへ必要な情報を入れて各Clientへ送信
 			//カードを配る, ゲームルールを配って, 開始
 			gamemanager.gameStart(ranking);
-			
+			List<Integer> playerIDList = new ArrayList<>();
+			Map<Integer, String> players_name = new HashMap<>();
+			Map<Integer, Integer> players_card_num = new HashMap<>();
+			Map<Integer, List<String>> players_strcards = new HashMap<>();
+			Map<Integer, Integer> players_pass_num = new HashMap<>();
 			prot.setProtocol_Bool(isPlayable);
-			Player[] p_ary = gamemanager.getPlayerList();
-			for(int i = 0; i < p_ary.length && p_ary[i]!=null; i++) {
+			Player[] player_array = gamemanager.getPlayerList();
+			for(int i = 0; i < player_array.length && player_array[i]!=null; i++) {
 				//TODO
 				List<Card> cards = gamemanager.getPlayerCardList(i);
-				Player p = p_ary[i];
-				System.out.println("user:"+p.getUserName());
-				GameProtocol gp = new GameProtocol(new Game());
-				this.players.get(p).send(gp);
-				for(String c: playersCardToString(cards)) {
-					System.out.println(c);
-				}
-			}
-			//st.send(prot);
+				Player p = player_array[i];
+				int pid = p.getPlayerID();
+				String pname = p.getUserName();
 				
-			//st.send();
+				System.out.println("user:"+p.getUserName());
+				playerIDList.add(p.getPlayerID());
+				players_name.put(pid, pname);
+				players_card_num.put(pid, cards.size());
+				players_strcards.put(pid, playersCardToString(cards));
+				players_pass_num.put(pid, p.getPass());
+			}
+			
+			//全員に送信
+			for(int i = 0; i < player_array.length && player_array[i]!=null; i++) {
+				Player p = player_array[i];
+				int pid = p.getPlayerID();
+				GameStarterKit starterkit = new GameStarterKit(pid, gr);
+				starterkit.setHands(players_strcards.get(pid));
+				starterkit.setPlayerIDList(playerIDList);
+				starterkit.setPlayers_name(players_name);
+				starterkit.setPlayers_card_num(players_card_num);
+				starterkit.setPlayersPassNum(players_pass_num);
+				Protocol starterkit_prot = new GameStarterKitProtocol(starterkit);
+				starterkit_prot.setProtocol_Bool(true);
+				this.players.get(p).send(starterkit_prot);
+			}
 		}
 		else {
 			//false:送り主に開始できないことを送信
@@ -185,7 +209,7 @@ public class Server implements Runnable{
 		
 	}
 	
-	public List<String> playersCardToString(List<Card> cards){
+	private List<String> playersCardToString(List<Card> cards){
 		List<String> results = new ArrayList<>();
 		for(Card c: cards) {
 			String cardstr = "joker";
@@ -197,11 +221,23 @@ public class Server implements Runnable{
 			else if(Card.DIA_TYPE==t)type="diamond";
 			cardstr = type + String.valueOf(c.getNumber());
 			if(Card.JOKER_TYPE==t||Card.JOKER_NUMBER==c.getNumber())
-				cardstr = "joker";	
+				cardstr = "x1";	//GUIのジョーカーのファイル名に依存
 			
 			results.add(cardstr);
 		}
 		return results;
+	}
+
+	public void recvGameStarterKit(GameStarterKitProtocol prot, ServerThread serverThread) {
+		GameStarterKit sk = prot.getStarterKit();
+		if(prot.isProtocol_Bool()) {
+			//
+			System.out.println("StarterKit_OK:"+sk.getPlayer_id()+", ");
+		}
+		else {
+			System.out.println("StarterKit_Failed:"+sk.getPlayer_id()+", ");
+		}
+		//全員準備できたら, OK
 	}
 }
 
@@ -281,8 +317,9 @@ class ServerThread extends Thread{
 		//GameStartable
 		case 4:
 			break;
-			//GameStarterKit
+		//GameStarterKit
 		case 5:
+			mainserver.recvGameStarterKit((GameStarterKitProtocol)prot, this);
 			break;
 		default:
 			break;

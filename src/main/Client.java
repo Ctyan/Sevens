@@ -5,6 +5,9 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import gui.*;
 import protocol.*;
@@ -15,7 +18,7 @@ public class Client implements GUIListener{
 	private static final String SERVER_IP = "localhost";
 	private static final int SERVER_PORT = 5001;
 	//TODO GUImanager, Listener, etc...
-	Player me;
+	Player player;
 	
 	GUIManager guimanager;
 	gui.Main guimain;
@@ -127,7 +130,7 @@ public class Client implements GUIListener{
 
 	@Override
 	public void registarRule(int round, int passNum, boolean joker, boolean tunnel) {
-		send(new GameRuleProtocol(new GameRule(round, passNum, joker, tunnel)));
+		send(new GameRuleProtocol(new GameRule( this.guimanager.getMyId(), this.name, round, passNum, joker, tunnel)));
 	}
 
 	@Override
@@ -155,13 +158,19 @@ public class Client implements GUIListener{
 	public void usedPass(boolean pass) {
 		
 	}
-
+	
+	//TODO 
 	public void recvGameRule(GameRuleProtocol prot) {
 		if(prot.isProtocol_Bool()) {
-			//ゲーム開始
 			GameRule gr = prot.getGameRule();
 			System.out.println("recv"+gr);
-			
+			//GameRuleが送られてきたら, キャンセルボタンをロック
+			//GameRuleを記述したのが自分自身なら, Wait画面へ遷移し, キャンセルボタンをロック
+			if(gr.getSettingPlayerID()==this.guimanager.getMyId()
+					&& gr.getSettingPlayerName().equals(this.name)) {
+				//Rule画面からWait画面へ
+			}
+			//Wait画面のキャンセルをロック
 		}
 		else {
 			//待機継続
@@ -171,29 +180,60 @@ public class Client implements GUIListener{
 
 	@Override
 	public void winGame(boolean win) {
-		// TODO 自動生成されたメソッド・スタブ
 		
 	}
 
 	@Override
 	public void nextGame(boolean next) {
-		// TODO 自動生成されたメソッド・スタブ
 		
 	}
 
 	@Override
 	public void exitGame(boolean exit) {
-		// TODO 自動生成されたメソッド・スタブ
 		
 	}
 
 	public void recvGameStartable(Protocol prot) {
-		// TODO 自動生成されたメソッド・スタブ
 		//RuleControllerのゲーム開始ボタンを押せるように変化させる
 		System.out.println("ChangeStartable!");
 		boolean startable = prot.isProtocol_Bool();
 		if(Main.ruleCon!=null)
 			Main.ruleCon.changeButton(startable);
+	}
+
+	public void recvGameStarterKit(GameStarterKitProtocol prot) {
+		//TODO ここからゲーム開始画面へ
+		GameStarterKit sk = prot.getStarterKit();
+		//GUIManagerに情報をすべて渡してから, ゲーム画面へ遷移させる
+		if(prot.isProtocol_Bool()&&sk.getPlayer_id()==this.guimanager.getMyId()) {
+			System.out.println("Complete_StarterKit!");	
+			//ゲームルール情報
+			GameRule gr = sk.getGameRule();
+			String[] rule = {String.valueOf(gr.getPass()), String.valueOf(gr.getRound())
+							,String.valueOf(gr.isJoker()), String.valueOf(gr.isTunnel())
+							};
+			this.guimanager.setRule(rule);
+			
+			//ゲームのプレイヤーたちの情報
+			//this.guimanager.setMyHand((ArrayList<String>)sk.getHands());
+			this.guimanager.setMemberNum(sk.getPlayerIDList().size());
+			this.guimanager.setPlayerName(sk.getPlayers_name());
+			this.guimanager.setPlayerCardNum(sk.getPlayers_card_num());
+			this.guimanager.setPlayerPassNum(sk.getPlayersPassNum());
+			this.guimain.nextScene("Play.fxml");
+		}
+		//自分のIDと一致しないとき
+		else {
+			System.out.println("Invalid_StarterKit");
+			prot.setProtocol_Bool(false);
+		}
+		sk.setGameRule(null);
+		sk.setHands(null);
+		sk.setPlayerIDList(null);
+		sk.setPlayers_card_num(null);
+		sk.setPlayers_name(null);
+		sk.setPlayersPassNum(null);
+		send(prot);
 	}
 }
 
@@ -252,6 +292,7 @@ class ClientReciever extends Thread{
 			break;
 		//GameStarterKit
 		case 5:
+			owner.recvGameStarterKit((GameStarterKitProtocol)prot);
 			break;
 		default:
 			break;
