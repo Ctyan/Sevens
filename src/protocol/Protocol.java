@@ -15,7 +15,12 @@ public class Protocol implements Serializable{
 	public Protocol(int id){
 		Protocol_ID = id;
 	}
-
+	
+	public Protocol(int id, boolean bool) {
+		Protocol_ID = id;
+		Protocol_Bool = bool;
+	}
+	
 	public Integer getProtocol_ID() {
 		return Protocol_ID;
 	}
