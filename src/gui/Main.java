@@ -10,7 +10,8 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 	private GUIManager manager = GUIManager.getInstance();
-
+	public static RuleController ruleCon;
+	
 	@Override
 	public void start(Stage primaryStage) {
 		try {
