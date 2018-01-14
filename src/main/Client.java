@@ -27,23 +27,9 @@ public class Client implements GUIListener{
 	ObjectInputStream ois;
 
 	public static void main(String[] args){
-		BufferedReader  reader = new BufferedReader(new InputStreamReader(System.in));
 		try{
-			//reader = new BufferedReader(new InputStreamReader(System.in));
-			//System.out.println("Your name >");
 			Client client = new Client();
-			//System.out.print("Server name(localhost or 133.27.....)? >");
-			//String serverName = SERVER_IP;
-			//client.connectServer(serverName, 5001);
-			/* */
 			client.guimain.main(args);
-			//マルチコンソールチャット テスト用
-			/* */
-			while(true){
-				String line = reader.readLine();
-				client.sendChat(new Chat(line, line.length(), client.name));
-			}
-			
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -67,7 +53,6 @@ public class Client implements GUIListener{
 
 	/**指定したサーバに接続する*/
 	public void connectServer(String serverName, int port) {
-		Socket socket;
 		try {
 			socket = new Socket(serverName, 5001);
 			System.out.print("サーバへ接続成功");
@@ -75,7 +60,9 @@ public class Client implements GUIListener{
 			ois = new ObjectInputStream(socket.getInputStream());
 			new ClientReciever(ois, this).start();
 			//接続後, user_nameを送る
-			send(new PlayerEntryProtocol(new PlayerEntry(this.name)));
+			Protocol prot = new PlayerEntryProtocol(new PlayerEntry(this.name));
+			prot.setProtocol_Bool(true);
+			send(prot);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -111,14 +98,20 @@ public class Client implements GUIListener{
 		System.out.println("resv:"+chat);
 	}
 	
-	/**PlayerEntryの中身を見る*/
-	public void recvPlayerEntry(PlayerEntryProtocol prot) {
+	/**PlayerEntryの中身を見る
+	 * @throws IOException */
+	public void recvPlayerEntry(PlayerEntryProtocol prot) throws IOException {
 		PlayerEntry pe = prot.getPlayerEntry();
-		if(pe.isEntry()) {
-			guimanager.setMyId(pe.getPlayer_id());
-			if(pe.isFirst()) {
-				guimain.nextScene("RuleSettings.fxml");
+		if(prot.isProtocol_Bool()) {
+			if(pe.isEntry()) {
+				guimanager.setMyId(pe.getPlayer_id());
+				if(pe.isFirst()) {
+					guimain.nextScene("RuleSettings.fxml");
+				}
 			}
+		}
+		else {
+			this.name = null;
 		}
 		System.out.println("recv:"+pe);
 	}
@@ -140,7 +133,12 @@ public class Client implements GUIListener{
 	@Override
 	public void cancelGame(boolean cancel) {
 		guimanager.nextScene("Start.fxml");
-		//send():取り消したことをサーバへ通知
+		int id = guimanager.getMyId();
+		PlayerEntry pe = new PlayerEntry(this.name);
+		pe.setPlayer_id(id);
+		Protocol prot = new PlayerEntryProtocol(pe);
+		prot.setProtocol_Bool(false);
+		send(prot);
 	}
 
 	@Override
@@ -181,12 +179,14 @@ public class Client implements GUIListener{
 		
 	}
 
-	public void recvGameStartable() {
+	public void recvGameStartable(Protocol prot) {
 		// TODO 自動生成されたメソッド・スタブ
 		//RuleControllerのゲーム開始ボタンを押せるように変化させる
-		System.out.println("Startable!");
+		System.out.println("ChangeStartable!");
+		boolean startable = prot.isProtocol_Bool();
+		if(Main.ruleCon!=null)
+			Main.ruleCon.changeButton(startable);
 	}
-
 }
 
 
@@ -207,7 +207,6 @@ class ClientReciever extends Thread{
 		while(ois!=null){
 			try {
 				recv();
-				Thread.sleep(500);
 			}
 			catch (Exception e) {
 				e.printStackTrace();
@@ -221,7 +220,7 @@ class ClientReciever extends Thread{
 		readProtocol(recvmsg);
 	}
 
-	private void readProtocol(Protocol prot){
+	private void readProtocol(Protocol prot) throws IOException{
 		switch(prot.getProtocol_ID()){
 		//Chat
 		case 0:
@@ -241,7 +240,7 @@ class ClientReciever extends Thread{
 			break;
 		//GameStartable
 		case 4:
-			owner.recvGameStartable();
+			owner.recvGameStartable(prot);
 			break;
 		default:
 			break;
