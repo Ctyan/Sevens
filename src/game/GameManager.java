@@ -13,6 +13,8 @@ import item.Ranking;
 /**Cardクラスのみ1から数え上げ*/
 public class GameManager{
 
+	// Cardクラスのみ1から数え上げ
+
 	private final int MAX_PLAYER_VALUE = 6;
 	private final int MIN_PLAYER_VALUE = 3;
 
@@ -103,9 +105,7 @@ public class GameManager{
 		/**開始プレイヤーを決める*/
 		Random r = new Random();
 		thisTurnPlayerNumber = r.nextInt() % playerCount;
-
 		this.ranking = ranking;
-
 		return true;
 	}
 
@@ -199,7 +199,7 @@ public class GameManager{
 		}
 		return false;
 	}
-
+  
 	/**引数のカードがジョーカーかどうか*/
 	public boolean isJokerCard(Card card) {
 		return card.getType() == Card.JOKER_TYPE;
