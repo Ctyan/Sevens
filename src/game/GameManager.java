@@ -119,6 +119,7 @@ public class GameManager{
 
 	/**現在のターンのプレイヤーを取得*/
 	public Player getThisTurnPlayer() {
+		//TODO 一番初めに呼び出したときエラーを吐かれる
 		return playerList[getThisTurnPlayerNumber()];
 	}
 
