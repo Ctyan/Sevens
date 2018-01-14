@@ -17,7 +17,9 @@ public class Server implements Runnable{
 	ServerSocket serversocket;
 	
 	GameManager gamemanager;
-
+	
+	int accessNum = 0;
+	
 	public Server(){
 		clients = new HashMap<>();
 		players = new HashMap<>();
@@ -59,37 +61,84 @@ public class Server implements Runnable{
 
 	/**接続が切れたと思われるクライアントを取除く*/
 	public void removeClient(ServerThread st){
-		clients.remove(st.client);
-		gamemanager.removePlayer(st.player.getPlayerID());
+		try {
+			st.client.close();
+			clients.remove(st.client);
+			st.ois.close();
+			st.oos.close();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
 		players.remove(st.player);
+		System.out.println("remove_connection:"+st);
 	}
 	
-	/**Clientが最初に送るuser_nameを受け付け, gameへplayerとして登録する,　送り主へ登録結果を送信する*/
-	public void recvPlayerEntry(PlayerEntryProtocol prot, ServerThread sender) {
+	/**Clientが最初に送るuser_nameを受け付け, gameへplayerとして登録する,　送り主へ登録結果を送信する
+	 * @throws IOException */
+	public void recvPlayerEntry(PlayerEntryProtocol prot, ServerThread sender) throws IOException {
+		boolean p_bool = prot.isProtocol_Bool();
+		
 		PlayerEntry pe = prot.getPlayerEntry();
 		String name = pe.getPlayer_name();
-		int player_no = gamemanager.getPlayerCount();
-		Player player = new Player(name, player_no);
-		if(gamemanager.setPlayer(player)) {
-			players.put(player, sender);
-			sender.player=player;
-			pe.setEntry(true);
-			pe.setPlayer_id(player_no);
-			if(gamemanager.getPlayerCount()==1)
-				pe.setFirst(true);
-			if(gamemanager.isPlayerCountOK()) {
-				Player[] players = gamemanager.getPlayerList();
-				if(players!=null&&players.length>=1) {
-					ServerThread settingPlayer = this.players.get(players[0]);
-					settingPlayer.send(new Protocol(Protocol.GAME_STARTABLE));
-				}
+		if(p_bool) {
+			//参加処理
+			int player_no = accessNum++;
+			Player player = new Player(name, player_no);
+			System.out.println("Entry_Player_ID:"+(player_no)+", Name:"+player.getUserName());
+			if(gamemanager.setPlayer(player)) {
+				players.put(player, sender);
+				sender.player=player;
+				pe.setEntry(true);
+				pe.setPlayer_id(player_no);
+				if(player.getPlayerID()==0)pe.setFirst(true);
+			}
+			else {
+				pe.setEntry(false);
 			}
 		}
 		else {
-			pe.setEntry(false);
+			//キャンセル処理
+			int cancel_player_id = sender.player.getPlayerID();
+			int remove_index = 1;
+			Player[] players = gamemanager.getPlayerList();
+			if(players.length > 1) {
+				//キャンセルユーザを見つける
+				for(int i = 0; i < players.length; i++) {
+					Player p = players[i];
+					if(p != null) {
+						int player_id = players[i].getPlayerID();
+						if(cancel_player_id==player_id) {
+							remove_index = i;
+						}
+						System.out.println("index:"+i+", player="+p.getUserName());
+					}
+					else {
+						System.out.println("index:"+i+", player="+p);
+					}
+				}
+				Player removePlayer = players[remove_index];
+				if(removePlayer!=null) {
+					gamemanager.removePlayer(remove_index+1);
+					System.out.println("remove_index:"+remove_index+", player_id:"+removePlayer.getPlayerID());
+				}
+			}
 		}
 		System.out.println("entry-player:"+pe);
-		sender.send(new PlayerEntryProtocol(pe));
+		prot.setPlayerEntry(pe);
+		sender.send(prot);
+		
+		//ゲーム設定をしているユーザへ, ゲーム開始可能かを通知
+		System.out.println("getPlayerCnt:"+gamemanager.getPlayerCount());
+		Player[] players = gamemanager.getPlayerList();
+		ServerThread firstPlayer;
+		if(players!=null&&players.length>=1) {
+			firstPlayer = this.players.get(players[0]);
+			boolean bool = gamemanager.isPlayerCountOK();
+			firstPlayer.send(new Protocol(Protocol.GAME_STARTABLE, bool));
+			System.out.println("firstPlayer-Ready:"+bool);
+		}
+		System.out.println();
 	}
 	
 	/***/
@@ -140,7 +189,6 @@ class ServerThread extends Thread{
 		while(ois!=null){
 			try {
 				recv();
-				Thread.sleep(500);
 			}
 			catch (Exception e) {
 				e.printStackTrace();
@@ -166,9 +214,10 @@ class ServerThread extends Thread{
 			e.printStackTrace();
 		}
 	}
-
-	/**受信情報を読み取る*/
-	private void readProtocol(Protocol prot){
+	
+	/**受信情報を読み取る
+	 * @throws IOException */
+	private void readProtocol(Protocol prot) throws IOException{
 		switch(prot.getProtocol_ID()){
 		//Chat
 		case 0:
@@ -193,5 +242,9 @@ class ServerThread extends Thread{
 		default:
 			break;
 		}
+	}
+	
+	public String toString() {
+		return this.player.getPlayerID()+", "+this.player.getUserName();
 	}
 }
