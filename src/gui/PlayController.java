@@ -111,7 +111,6 @@ public class PlayController implements Initializable {
 		double y = 507;
 		int i = 0;
 		
-		int forcount=0;
 		for (String hand : myHand) {
 			try {
 				cardImage = new Image(new FileInputStream(filepath + hand + ".gif"));
@@ -127,7 +126,7 @@ public class PlayController implements Initializable {
 			iv.setEffect(lighting);
 
 			imageview.add(iv);
-			System.out.println(forcount+":"+myHand.get(i));
+			System.out.println("MyHand:"+myHand.get(i));
 			anchorpane.getChildren().add(imageview.get(i));
 			x += 40;
 			imageview.get(i).setOnMouseClicked((MouseEvent e) -> {
