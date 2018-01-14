@@ -24,9 +24,10 @@ public class RuleController {
 	public Button startButton;
 
 	/**ゲーム開始ボタンを押せるようにするメソッド*/
-	public void changeButton(){
+	public void changeButton(boolean able){
 		Platform.runLater(() -> {
-			startButton.setDisable(true);
+			startButton.setDisable(!able);
+			System.out.println("ChangeStartableButton!");
 		});
 	}
 
