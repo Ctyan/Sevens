@@ -12,6 +12,7 @@ import java.util.Map;
 import gui.*;
 import protocol.*;
 import item.*;
+import javafx.application.Platform;
 
 /**起動すると指定されたサーバへ接続します*/
 public class Client implements GUIListener{
@@ -19,6 +20,7 @@ public class Client implements GUIListener{
 	private static final int SERVER_PORT = 5001;
 	//TODO GUImanager, Listener, etc...
 	Player player;
+	
 	
 	GUIManager guimanager;
 	gui.Main guimain;
@@ -146,16 +148,97 @@ public class Client implements GUIListener{
 
 	@Override
 	public void sendChat(String chat) {
-		
+		System.out.println("sendChat:"+chat);
 	}
 
 	@Override
 	public void sendCard(String card) {
-		
+		this.guimanager.setCardClickFlag(false);
+		this.guimanager.setPassClickFlag(false);
+		sendPlayCard(card, false);
+	}
+	
+	public void sendPlayCard(String card, boolean playJoker) {
+		System.out.println("sendCard:"+card);
+//		if(card.equals("x1")) {
+//			
+//		}
+		Game game = new Game(this.guimanager.getMyId(), this.name);
+		game.setPlayCard(card);
+		game.setPlayJoker(playJoker);
+		Protocol gp = new GameProtocol(game);
+		gp.setProtocol_Bool(true);
+		send(gp);
 	}
 
 	@Override
 	public void usedPass(boolean pass) {
+		this.guimanager.setCardClickFlag(false);
+		this.guimanager.setPassClickFlag(false);
+		sendPass();
+	}
+	
+	public void sendPass() {
+		System.out.println("sendPass:"+true);
+		Game game = new Game(this.guimanager.getMyId(), this.name);
+		game.setPlayPass(true);
+		Protocol gp = new GameProtocol(game);
+		gp.setProtocol_Bool(true);
+		
+		send(gp);
+	}
+	
+	/**Gameを受け取ったとき*/
+	public void recvGame(GameProtocol prot) {
+		Game game = prot.getGame();
+		int turnPlayerId = game.getTurnPlayerId();
+		String turnPlayerName = game.getTurnPlayerName();
+		boolean playPass = game.isPlayPass();
+		String playCard = game.getPlayCard();
+		
+		if(this.guimanager.getMyId() == turnPlayerId && this.name.equals(turnPlayerName)) {
+			//自分のターン
+			System.out.println("自分のターン!");
+			//Playできるカードを調べる?
+			boolean playable = false;
+			boolean pass = true;
+			//playable=false for(String cardstr: myHand)if(!playable)cardstr in MyHand; playable = true;
+			int max_pass = Integer.valueOf(this.guimanager.getRule()[0]);
+			if(this.guimanager.getPlayerPassNum().get(turnPlayerId) < max_pass)
+				pass=true;	
+			
+			this.guimanager.setCardClickFlag(true);
+			if(!playable&&pass)
+				this.guimanager.setPassClickFlag(true);
+		}
+		else {
+			//他人のターン
+			System.out.println("OtherPlayer :"+game.getTurnPlayerName()+"play=[Card:"+playCard+", Joker:"+game.isPlayJoker()+", Pass:"+playPass+"]");
+			if(playCard!=null && playPass==false) {
+				//何かカードを出した
+				int card_num = this.guimanager.getPlayerCardNum().get(turnPlayerId);
+				this.guimanager.getPlayerCardNum().put(turnPlayerId, card_num-1);
+				
+				if(game.isPlayJoker()) {
+					//Jokerをプレイされたら, 対象とするカードのを使ってJokerをその位置に代わりに置く
+					this.guimain.playedCardByOtherPlayer(playCard, true);
+				}
+				else {
+					//Jokerではない
+					this.guimain.playedCardByOtherPlayer(playCard, false);
+				}
+				
+			}
+			else if(playCard==null && playPass==true) {
+				//パスをした
+				int pass_num = this.guimanager.getPlayerPassNum().get(turnPlayerId);
+				this.guimanager.getPlayerPassNum().put(turnPlayerId, pass_num+1);
+				
+			}
+			else {
+				
+			}
+		}
 		
 	}
 	
@@ -200,9 +283,10 @@ public class Client implements GUIListener{
 		if(Main.ruleCon!=null)
 			Main.ruleCon.changeButton(startable);
 	}
-
+	
+	/**StarterKitを受け取り, 内容をGUIに反映させる*/
 	public void recvGameStarterKit(GameStarterKitProtocol prot) {
-		//TODO ここからゲーム開始画面へ
+		//ここからゲーム開始画面へ
 		GameStarterKit sk = prot.getStarterKit();
 		//GUIManagerに情報をすべて渡してから, ゲーム画面へ遷移させる
 		if(prot.isProtocol_Bool()&&sk.getPlayer_id()==this.guimanager.getMyId()) {
@@ -238,6 +322,7 @@ public class Client implements GUIListener{
 		sk.setPlayersPassNum(null);
 		send(prot);
 	}
+	
 }
 
 
@@ -279,7 +364,7 @@ class ClientReciever extends Thread{
 			break;
 		//Game
 		case 1:
-
+			owner.recvGame((GameProtocol)prot);
 			break;
 		//PlayerEntry
 		case 2:
