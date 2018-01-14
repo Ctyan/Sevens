@@ -215,7 +215,10 @@ public class Client implements GUIListener{
 			this.guimanager.setRule(rule);
 			
 			//ゲームのプレイヤーたちの情報
-			//this.guimanager.setMyHand((ArrayList<String>)sk.getHands());
+			for(String h: sk.getHands()) {
+				System.out.println("Hand:"+h);
+			}
+			this.guimanager.setMyHand((ArrayList<String>)sk.getHands());
 			this.guimanager.setMemberNum(sk.getPlayerIDList().size());
 			this.guimanager.setPlayerName(sk.getPlayers_name());
 			this.guimanager.setPlayerCardNum(sk.getPlayers_card_num());
