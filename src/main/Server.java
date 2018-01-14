@@ -4,7 +4,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import game.*;
@@ -141,25 +143,60 @@ public class Server implements Runnable{
 		System.out.println();
 	}
 	
-	/***/
+	/**ゲームルール送信受け取り部分, 受取れたらゲームを開始*/
 	public void recvGameRule(GameRuleProtocol prot, ServerThread sender) {
 		GameRule gr = prot.getGameRule();
 		boolean isPlayable = gamemanager.setGamePlayable(gr.getRound(), gr.getPass(), gr.isJoker(), gr.isTunnel());
 		if(isPlayable) {
-			for(ServerThread st: clients.values()) {
-				st.send(prot);
+			Ranking ranking = new Ranking(gamemanager.getPlayerCount());
+			gamemanager.gameStart(ranking);
+			prot.setProtocol_Bool(isPlayable);
+			Player[] p_ary = gamemanager.getPlayerList();
+			for(int i = 0; i < p_ary.length && p_ary[i]!=null; i++) {
+				//TODO
+				List<Card> cards = gamemanager.getPlayerCardList(i);
+				Player p = p_ary[i];
+				System.out.println("user:"+p.getUserName());
+				for(String c: playersCardToString(cards)) {
+					System.out.println(c);
+				}
 			}
+			//st.send(prot);
+				
+				//st.send();
 		}
 		else {
 			//false:送り主に開始できないことを送信
-			//sender.send(sendmsg);
+			//sender.send(sendmsg)
+			prot.setProtocol_Bool(isPlayable);
+			sender.send(prot);
 		}
+		System.out.println(sender+", GameRule:"+gr);
 	}
 	
 	public void recvGame(GameProtocol prot, ServerThread sender) {
 		//Game進行に関する情報の受け取り
 		Game game = prot.getGame();
 		
+	}
+	
+	public List<String> playersCardToString(List<Card> cards){
+		List<String> results = new ArrayList<>();
+		for(Card c: cards) {
+			String cardstr = "joker";
+			int t = c.getType();
+			String type = "";
+			if(Card.SPADE_TYPE==t)type = "spade";
+			else if(Card.HEART_TYPE==t)type="heart";
+			else if(Card.CLUB_TYPE==t)type="club";
+			else if(Card.DIA_TYPE==t)type="diamond";
+			cardstr = type + String.valueOf(c.getNumber());
+			if(Card.JOKER_TYPE==t||Card.JOKER_NUMBER==c.getNumber())
+				cardstr = "joker";	
+			
+			results.add(cardstr);
+		}
+		return results;
 	}
 }
 
