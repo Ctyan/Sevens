@@ -16,6 +16,7 @@ import protocol.*;
 public class Server implements Runnable{
 	Map<Socket, ServerThread> clients;
 	Map<Player, ServerThread> players;
+	List<Player> inGamePlayers;
 	ServerSocket serversocket;
 	
 	GameManager gamemanager;
@@ -165,7 +166,6 @@ public class Server implements Runnable{
 			prot.setProtocol_Bool(isPlayable);
 			Player[] player_array = gamemanager.getPlayerList();
 			for(int i = 0; i < player_array.length && player_array[i]!=null; i++) {
-				//TODO
 				List<Card> cards = gamemanager.getPlayerCardList(i);
 				Player p = player_array[i];
 				int pid = p.getPlayerID();
@@ -203,12 +203,71 @@ public class Server implements Runnable{
 		System.out.println(sender+", GameRule:"+gr);
 	}
 	
+	/**送り主はターンプレイヤー, ターンプレイヤー以外は送らない*/
 	public void recvGame(GameProtocol prot, ServerThread sender) {
 		//Game進行に関する情報の受け取り
 		Game game = prot.getGame();
+		for(ServerThread st: players.values()) {
+			//送り主以外に何をしたか知らせる
+			if(!st.equals(sender))
+				st.send(prot);
+		}
+		String playCard = game.getPlayCard();
+		boolean playJoker = game.isPlayJoker();
+		boolean playPass = game.isPlayPass();
+		Card card = null;
+		if(playCard!=null) {
+			//ターンプレイヤーがカードを出した
+			String cardstr = game.getPlayCard();
+			card = cardstringToCard(cardstr);
+		}
+		gamemanager.turnProcessing(card, playJoker, playPass, 0);
+		if(playPass)gamemanager.doPass(sender.player);
 		
+		//次ターン
+		sendPlayersNextTurn(sender.player);
 	}
 	
+	public void sendPlayersNextTurn(Player turnPlayer) {
+		//int playerIndex = gamemanager.nextThisTurnPlayerNumber();		
+		//Player turnPlayer = this.gamemanager.getThisTurnPlayer();
+		int listindex = inGamePlayers.indexOf(turnPlayer);
+		if(0 <= listindex && listindex < inGamePlayers.size()-1)
+			turnPlayer = inGamePlayers.get(listindex+1);
+		else
+			turnPlayer = inGamePlayers.get(0);
+		
+		System.out.println("NextTurn, ID:"+turnPlayer.getPlayerID()+", Name:"+turnPlayer.getUserName());
+		Protocol gameProt = new GameProtocol(new Game(turnPlayer.getPlayerID(), turnPlayer.getUserName()));
+		gameProt.setProtocol_Bool(true);
+		for(ServerThread st: players.values()) {
+			//Game情報を送信
+			st.send(gameProt);
+		}
+	}
+	
+	/**card文字列をCardインスタンスへ*/
+	private Card cardstringToCard(String cardstr) {
+		Card card = null;
+		String type = cardstr.replaceAll("[0-9]+", "");
+		String numstr = cardstr.replaceAll("[a-z]+", "");
+		int typenum = 0;
+		int num = Integer.valueOf(numstr);
+		if(type.equals("spade"))typenum = Card.SPADE_TYPE;
+		else if(type.equals("heart"))typenum = Card.HEART_TYPE;
+		else if(type.equals("club"))typenum = Card.CLUB_TYPE;
+		else if(type.equals("diamond"))typenum = Card.DIA_TYPE;
+		
+		if(typenum==Card.JOKER_TYPE) {
+			card = new Card(Card.JOKER_TYPE, Card.JOKER_NUMBER);
+		}
+		else {
+			card = new Card(typenum, num);
+		}
+		return card;
+	}
+	
+	/**Card list を String listへ*/
 	private List<String> playersCardToString(List<Card> cards){
 		List<String> results = new ArrayList<>();
 		for(Card c: cards) {
@@ -228,17 +287,32 @@ public class Server implements Runnable{
 		return results;
 	}
 
-	public void recvGameStarterKit(GameStarterKitProtocol prot, ServerThread serverThread) {
+	public void recvGameStarterKit(GameStarterKitProtocol prot, ServerThread sender) {
 		GameStarterKit sk = prot.getStarterKit();
 		if(prot.isProtocol_Bool()) {
 			//
 			System.out.println("StarterKit_OK:"+sk.getPlayer_id()+", ");
+			if(inGamePlayers==null)
+				inGamePlayers = new ArrayList<>();
+			inGamePlayers.add(sender.player);
 		}
 		else {
 			System.out.println("StarterKit_Failed:"+sk.getPlayer_id()+", ");
 		}
-		//全員準備できたら, OK
+		//全員準備できたら, 一番最初のターン人の情報を全員へ送信
+		if(inGamePlayers.size()==gamemanager.getPlayerCount()) {
+			//Player turnPlayer = this.gamemanager.getThisTurnPlayer();
+			Player turnPlayer = inGamePlayers.get(0);
+			System.out.println("ターンプレイヤー, ID:"+turnPlayer.getPlayerID()+", Player:"+turnPlayer.getUserName());
+			Protocol gameProt = new GameProtocol(new Game(turnPlayer.getPlayerID(), turnPlayer.getUserName()));
+			gameProt.setProtocol_Bool(true);
+			for(ServerThread st: players.values()) {
+				//Game情報を送信
+				st.send(gameProt);
+			}
+		}
 	}
+
 }
 
 
@@ -303,7 +377,7 @@ class ServerThread extends Thread{
 			break;
 		//Game
 		case 1:
-			
+			mainserver.recvGame((GameProtocol)prot, this);
 			break;
 		
 		//PlayerEntry
