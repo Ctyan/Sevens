@@ -171,7 +171,7 @@ public class Server implements Runnable{
 				int pid = p.getPlayerID();
 				String pname = p.getUserName();
 				
-				System.out.println("user:"+p.getUserName());
+				System.out.println("user:"+p.getUserName()+", cards_num:"+cards);
 				playerIDList.add(p.getPlayerID());
 				players_name.put(pid, pname);
 				players_card_num.put(pid, cards.size());
