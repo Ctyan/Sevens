@@ -149,7 +149,10 @@ public class Server implements Runnable{
 		boolean isPlayable = gamemanager.setGamePlayable(gr.getRound(), gr.getPass(), gr.isJoker(), gr.isTunnel());
 		if(isPlayable) {
 			Ranking ranking = new Ranking(gamemanager.getPlayerCount());
+			//Start
+			//カードを配る, ゲームルールを配って, 開始
 			gamemanager.gameStart(ranking);
+			
 			prot.setProtocol_Bool(isPlayable);
 			Player[] p_ary = gamemanager.getPlayerList();
 			for(int i = 0; i < p_ary.length && p_ary[i]!=null; i++) {
@@ -157,13 +160,15 @@ public class Server implements Runnable{
 				List<Card> cards = gamemanager.getPlayerCardList(i);
 				Player p = p_ary[i];
 				System.out.println("user:"+p.getUserName());
+				GameProtocol gp = new GameProtocol(new Game());
+				this.players.get(p).send(gp);
 				for(String c: playersCardToString(cards)) {
 					System.out.println(c);
 				}
 			}
 			//st.send(prot);
 				
-				//st.send();
+			//st.send();
 		}
 		else {
 			//false:送り主に開始できないことを送信
@@ -275,6 +280,9 @@ class ServerThread extends Thread{
 			break;
 		//GameStartable
 		case 4:
+			break;
+			//GameStarterKit
+		case 5:
 			break;
 		default:
 			break;

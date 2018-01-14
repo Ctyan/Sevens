@@ -10,7 +10,8 @@ public class Protocol implements Serializable{
 					  GAME = 1,
 					  PLAYER_ENTRY = 2,
 					  GAME_RULE = 3,
-					  GAME_STARTABLE = 4;
+					  GAME_STARTABLE = 4,
+					  GAME_STARTER_KIT = 5;
 
 	public Protocol(int id){
 		Protocol_ID = id;

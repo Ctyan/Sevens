@@ -161,6 +161,7 @@ public class Client implements GUIListener{
 			//ゲーム開始
 			GameRule gr = prot.getGameRule();
 			System.out.println("recv"+gr);
+			
 		}
 		else {
 			//待機継続
@@ -248,6 +249,9 @@ class ClientReciever extends Thread{
 		//GameStartable
 		case 4:
 			owner.recvGameStartable(prot);
+			break;
+		//GameStarterKit
+		case 5:
 			break;
 		default:
 			break;
