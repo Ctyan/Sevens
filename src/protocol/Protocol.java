@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class Protocol implements Serializable{
 	private static final long serialVersionUID = 1861050339906354967L;
+	private boolean Protocol_Bool;
 	private Integer Protocol_ID;
 	public static int CHAT = 0,
 					  GAME = 1,
@@ -21,6 +22,14 @@ public class Protocol implements Serializable{
 
 	public void setProtocol_ID(Integer protocol_ID) {
 		Protocol_ID = protocol_ID;
+	}
+
+	public boolean isProtocol_Bool() {
+		return Protocol_Bool;
+	}
+
+	public void setProtocol_Bool(boolean protocol_Bool) {
+		Protocol_Bool = protocol_Bool;
 	}
 
 }
