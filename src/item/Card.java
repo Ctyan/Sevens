@@ -32,4 +32,18 @@ public class Card {
 		}
 		return false;
 	}
+
+	public String getMark(int t) {
+		switch (t) {
+		case SPADE_TYPE:
+			return "S";
+		case HEART_TYPE:
+			return "H";
+		case CLUB_TYPE:
+			return "C";
+		case DIA_TYPE:
+			return "D";
+		}
+		return null;
+	}
 }

@@ -27,6 +27,8 @@ public class GUIManager {
 	private boolean passClickFlag; //パスが押せるかの判定
 	private boolean changeButtonflag; //ランキング画面のボタンの切り替えの判定
 	private boolean endGameFlag; //ゲームへの操作の判定
+	private int[] roundScore; //ラウンドごとのスコア
+	private int round; //現在のラウンド
 
 	private GUIManager(){
 		instance = this;
@@ -131,14 +133,31 @@ public class GUIManager {
 	public boolean getChangeButtonflag() {
 		return changeButtonflag;
 	}
-	
+
 	public void setEndGameFlag(boolean endGameFlag) {
 		this.endGameFlag = endGameFlag;
 	}
-	
+
 	public boolean getEndGameFlag() {
 		return endGameFlag;
 	}
+
+	public void setRoundScore(int[] roundScore) {
+		this.roundScore = roundScore;
+	}
+
+	public int[] getRoundScore() {
+		return roundScore;
+	}
+
+	public void setRound(int round) {
+		this.round = round;
+	}
+
+	public int getRound() {
+		return round;
+	}
+
 
 	public void setGUIListener(GUIListener listener) {
 		this.listener = listener;

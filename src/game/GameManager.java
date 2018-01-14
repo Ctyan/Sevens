@@ -13,6 +13,8 @@ import item.Ranking;
 /**Cardクラスのみ1から数え上げ*/
 public class GameManager{
 
+	// Cardクラスのみ1から数え上げ
+
 	private final int MAX_PLAYER_VALUE = 6;
 	private final int MIN_PLAYER_VALUE = 3;
 
@@ -103,9 +105,7 @@ public class GameManager{
 		/**開始プレイヤーを決める*/
 		Random r = new Random();
 		thisTurnPlayerNumber = r.nextInt() % playerCount;
-
 		this.ranking = ranking;
-
 		return true;
 	}
 
@@ -140,8 +140,8 @@ public class GameManager{
 		/*
 		 * カードリストをプレイヤー人数の倍数で区切る
 		 * 余りを先頭から順に1枚ずつ配る
-		 * <---1---><---2---><---3---><---4---><---5--->123451234 |
-		 * 12345689TJQK12345689TJQK12345689TJQK12345689TJ QK  j   |
+		 * <---1---><---2---><---3---><---4---><---5--->1234|
+		 * 12345689TJQK12345689TJQK12345689TJQK12345689TJQKj|
 		 * 結果=>5番目だけ9枚になる。
 		 */
 		if(playCardList == null) return null;
@@ -199,7 +199,7 @@ public class GameManager{
 		}
 		return false;
 	}
-
+  
 	/**引数のカードがジョーカーかどうか*/
 	public boolean isJokerCard(Card card) {
 		return card.getType() == Card.JOKER_TYPE;
@@ -347,9 +347,15 @@ public class GameManager{
 				}
 			}
 			for(Card c : l) {
+				if(c.getType() == Card.JOKER_TYPE) {
+					System.out.println("ジョーカーあり");
+					continue;
+					}
 				cardField[c.getType()-1][c.getNumber()-1] = true;
 			}
+			System.out.println(" 123456789TJQK");
 			for(int tt=0;tt<4;tt++) {
+				System.out.print(new Card(0, 0).getMark(tt+1));
 				for(int nn=0;nn<13;nn++) {
 					if(cardField[tt][nn]) {
 						System.out.print("*");

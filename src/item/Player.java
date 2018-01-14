@@ -1,5 +1,7 @@
 package item;
 
+import java.util.Random;
+
 public class Player {
 
 	private String userName;
