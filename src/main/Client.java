@@ -157,8 +157,15 @@ public class Client implements GUIListener{
 	}
 
 	public void recvGameRule(GameRuleProtocol prot) {
-		GameRule gr = prot.getGameRule();
-		System.out.println("recv"+gr);
+		if(prot.isProtocol_Bool()) {
+			//ゲーム開始
+			GameRule gr = prot.getGameRule();
+			System.out.println("recv"+gr);
+		}
+		else {
+			//待機継続
+		}
+		
 	}
 
 	@Override
