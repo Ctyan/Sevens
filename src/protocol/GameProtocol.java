@@ -4,9 +4,9 @@ public class GameProtocol extends Protocol{
 	private static final long serialVersionUID = 8726301106850620523L;
 	private Game game;
 
-	public GameProtocol(Game Game) {
+	public GameProtocol(Game game) {
 		super(Protocol.GAME);
-		this.setGame(game);
+		this.game = game;
 	}
 
 	public Game getGame() {
