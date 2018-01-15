@@ -223,7 +223,7 @@ public class Server implements Runnable{
 			String cardstr = game.getPlayCard();
 			card = cardstringToCard(cardstr);
 		}
-		//gamemanager.turnProcessing(card, playJoker, playPass, 0);
+		gamemanager.turnProcessing(card, playJoker, playPass, 0);
 		if(playPass)gamemanager.doPass(sender.player);
 		//あがり?
 		if(playerHandsNum==0) {
@@ -273,12 +273,15 @@ public class Server implements Runnable{
 
 	public void sendPlayersNextTurn(Player turnPlayer) {
 		//int playerIndex = gamemanager.nextThisTurnPlayerNumber();		
-		//Player turnPlayer = this.gamemanager.getThisTurnPlayer();
+		/*
 		int listindex = inGamePlayers.indexOf(turnPlayer);
 		if(0 <= listindex && listindex < inGamePlayers.size()-1)
 			turnPlayer = inGamePlayers.get(listindex+1);
 		else
 			turnPlayer = inGamePlayers.get(0);
+		*/
+		this.gamemanager.nextThisTurnPlayerNumber();
+		turnPlayer = this.gamemanager.getThisTurnPlayer();
 		
 		System.out.println("NextTurn, ID:"+turnPlayer.getPlayerID()+", Name:"+turnPlayer.getUserName());
 		Protocol gameProt = new GameProtocol(new Game(turnPlayer.getPlayerID(), turnPlayer.getUserName()));
@@ -344,8 +347,8 @@ public class Server implements Runnable{
 		}
 		//全員準備できたら, 一番最初のターン人の情報を全員へ送信
 		if(inGamePlayers.size()==gamemanager.getPlayerCount()) {
-			//Player turnPlayer = this.gamemanager.getThisTurnPlayer();
-			Player turnPlayer = inGamePlayers.get(0);
+			Player turnPlayer = this.gamemanager.getThisTurnPlayer();
+			//Player turnPlayer = inGamePlayers.get(0);
 			System.out.println("ターンプレイヤー, ID:"+turnPlayer.getPlayerID()+", Player:"+turnPlayer.getUserName());
 			Protocol gameProt = new GameProtocol(new Game(turnPlayer.getPlayerID(), turnPlayer.getUserName()));
 			gameProt.setProtocol_Bool(true);
