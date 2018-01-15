@@ -17,6 +17,7 @@ public class Server implements Runnable{
 	Map<Socket, ServerThread> clients;
 	Map<Player, ServerThread> players;
 	List<Player> inGamePlayers;
+	Player[] roundPlayerRanking;
 	ServerSocket serversocket;
 	
 	GameManager gamemanager;
@@ -203,9 +204,9 @@ public class Server implements Runnable{
 		System.out.println(sender+", GameRule:"+gr);
 	}
 	
-	/**送り主はターンプレイヤー, ターンプレイヤー以外は送らない*/
+	/**Game送り主はターンプレイヤー, ターンプレイヤー以外は送ってこない, ターンプレイヤが上がったらRankingして,ターンプレイヤに通知*/
 	public void recvGame(GameProtocol prot, ServerThread sender) {
-		//Game進行に関する情報の受け取り
+		//TODO Game進行に関する情報の受け取り
 		Game game = prot.getGame();
 		for(ServerThread st: players.values()) {
 			//送り主以外に何をしたか知らせる
@@ -215,19 +216,61 @@ public class Server implements Runnable{
 		String playCard = game.getPlayCard();
 		boolean playJoker = game.isPlayJoker();
 		boolean playPass = game.isPlayPass();
+		int playerHandsNum = game.getTurnPlayerHandsNum();
 		Card card = null;
 		if(playCard!=null) {
 			//ターンプレイヤーがカードを出した
 			String cardstr = game.getPlayCard();
 			card = cardstringToCard(cardstr);
 		}
-		gamemanager.turnProcessing(card, playJoker, playPass, 0);
+		//gamemanager.turnProcessing(card, playJoker, playPass, 0);
 		if(playPass)gamemanager.doPass(sender.player);
-		
+		//あがり?
+		if(playerHandsNum==0) {
+			//このラウンドでの初めてのランキング生成
+			if(roundPlayerRanking==null)
+				roundPlayerRanking = new Player[inGamePlayers.size()];
+			
+			Integer ranking = rankingPlayer(roundPlayerRanking, sender.player, playJoker);
+			inGamePlayers.remove(sender.player);
+			
+			//アガリを通知
+			sender.player.endGame();
+			game.setTurnPlayerRanking(ranking);
+			game.setPlayCard(null);
+			game.setPlayJoker(false);
+			prot.setProtocol_Bool(false);
+			sender.send(prot);
+		}
 		//次ターン
-		sendPlayersNextTurn(sender.player);
+		if(inGamePlayers.size()!=0) {
+			sendPlayersNextTurn(sender.player);
+		}
+		else {
+			//ラウンドが終了!ランキング画面へ
+			for(ServerThread st: players.values()) {
+				//RankingPlot
+				//st.send();
+			}
+		}
 	}
 	
+	private int rankingPlayer(Player[] ranking, Player player, boolean playJoker) {
+		int i = 0;
+		int d = 1;
+		if(playJoker) {
+			i = ranking.length-1;
+			d = -1;
+		}
+		for(;0 <= i && i < ranking.length; i += d) {
+			if(ranking[i]==null) {
+				ranking[i] = player;
+				break;
+			}
+		}
+		return i+1;
+	}
+
 	public void sendPlayersNextTurn(Player turnPlayer) {
 		//int playerIndex = gamemanager.nextThisTurnPlayerNumber();		
 		//Player turnPlayer = this.gamemanager.getThisTurnPlayer();
@@ -310,6 +353,7 @@ public class Server implements Runnable{
 				//Game情報を送信
 				st.send(gameProt);
 			}
+			roundPlayerRanking = null;
 		}
 	}
 

@@ -155,10 +155,11 @@ public class Client implements GUIListener{
 	public void sendCard(String card) {
 		this.guimanager.setCardClickFlag(false);
 		this.guimanager.setPassClickFlag(false);
-		sendPlayCard(card, false);
+		int handCardNum=this.guimanager.getMyHand().size();
+		sendPlayCard(card, false, handCardNum);
 	}
 	
-	public void sendPlayCard(String card, boolean playJoker) {
+	public void sendPlayCard(String card, boolean playJoker, int handCardNum) {
 		System.out.println("sendCard:"+card);
 //		if(card.equals("x1")) {
 //			
@@ -166,6 +167,7 @@ public class Client implements GUIListener{
 		Game game = new Game(this.guimanager.getMyId(), this.name);
 		game.setPlayCard(card);
 		game.setPlayJoker(playJoker);
+		game.setTurnPlayerHandsNum(handCardNum);
 		Protocol gp = new GameProtocol(game);
 		gp.setProtocol_Bool(true);
 		send(gp);
@@ -175,6 +177,8 @@ public class Client implements GUIListener{
 	public void usedPass(boolean pass) {
 		this.guimanager.setCardClickFlag(false);
 		this.guimanager.setPassClickFlag(false);
+		int passnum = this.guimanager.getPlayerPassNum().get(guimanager.getMyId());
+		this.guimanager.getPlayerPassNum().put(guimanager.getMyId(), passnum+1);
 		sendPass();
 	}
 	
@@ -195,25 +199,30 @@ public class Client implements GUIListener{
 		String turnPlayerName = game.getTurnPlayerName();
 		boolean playPass = game.isPlayPass();
 		String playCard = game.getPlayCard();
-		
+		if(!prot.isProtocol_Bool()) {
+			Integer ranking = game.getTurnPlayerRanking();
+			this.guimain.updateTurnLabel("アガリです, あなたは"+ranking+"位です!");
+			return;
+		}
 		if(this.guimanager.getMyId() == turnPlayerId && this.name.equals(turnPlayerName)) {
 			//自分のターン
 			System.out.println("自分のターン!");
 			//Playできるカードを調べる?
-			boolean playable = false;
-			boolean pass = true;
+			boolean playable = true;
+			boolean pass = false;
 			//playable=false for(String cardstr: myHand)if(!playable)cardstr in MyHand; playable = true;
 			int max_pass = Integer.valueOf(this.guimanager.getRule()[0]);
 			if(this.guimanager.getPlayerPassNum().get(turnPlayerId) < max_pass)
 				pass=true;	
-			
-			this.guimanager.setCardClickFlag(true);
-			if(!playable&&pass)
-				this.guimanager.setPassClickFlag(true);
+
+			this.guimanager.setCardClickFlag(playable);
+			this.guimanager.setPassClickFlag(pass);
+			this.guimain.updateTurnLabel("あなたのターンです！");
 		}
 		else {
 			//他人のターン
 			System.out.println("OtherPlayer :"+game.getTurnPlayerName()+"play=[Card:"+playCard+", Joker:"+game.isPlayJoker()+", Pass:"+playPass+"]");
+			this.guimain.updateTurnLabel("Player["+game.getTurnPlayerName()+"]さんのターンです.");
 			if(playCard!=null && playPass==false) {
 				//何かカードを出した
 				int card_num = this.guimanager.getPlayerCardNum().get(turnPlayerId);
@@ -226,6 +235,7 @@ public class Client implements GUIListener{
 				else {
 					//Jokerではない
 					this.guimain.playedCardByOtherPlayer(playCard, false);
+					
 				}
 				
 			}
@@ -238,6 +248,7 @@ public class Client implements GUIListener{
 			else {
 				
 			}
+			this.guimain.updatePlayBoard();
 		}
 		
 	}
