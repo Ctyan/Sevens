@@ -7,6 +7,8 @@ public class Game implements Serializable{
 	private static final long serialVersionUID = -5117815579758499080L;
 	private int turnPlayerId;
 	private String turnPlayerName;
+	private int turnPlayerHandsNum;
+	private Integer turnPlayerRanking;
 	private boolean playPass;
 	private String playCard;
 	private boolean playJoker;
@@ -63,6 +65,22 @@ public class Game implements Serializable{
 
 	public void setPlayJoker(boolean playJoker) {
 		this.playJoker = playJoker;
+	}
+
+	public int getTurnPlayerHandsNum() {
+		return turnPlayerHandsNum;
+	}
+
+	public void setTurnPlayerHandsNum(int turnPlayerHandsNum) {
+		this.turnPlayerHandsNum = turnPlayerHandsNum;
+	}
+
+	public Integer getTurnPlayerRanking() {
+		return turnPlayerRanking;
+	}
+
+	public void setTurnPlayerRanking(Integer turnPlayerRanking) {
+		this.turnPlayerRanking = turnPlayerRanking;
 	}
 
 	
