@@ -18,3 +18,8 @@
 	-fx-text-fill: WHITE;
 	-fx-alignment: CENTER;
 }
+
+#canceltext {
+	-fx-border-radius: 10px;
+	-fx-background-radius: 10px;
+}

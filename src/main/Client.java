@@ -7,6 +7,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import gui.*;
@@ -199,32 +200,49 @@ public class Client implements GUIListener{
 		String turnPlayerName = game.getTurnPlayerName();
 		boolean playPass = game.isPlayPass();
 		String playCard = game.getPlayCard();
+		List<String> playableCards = game.getPlayableCards();
+		
 		if(!prot.isProtocol_Bool()) {
 			Integer ranking = game.getTurnPlayerRanking();
 			this.guimain.updateTurnLabel("アガリです, あなたは"+ranking+"位です!");
 			return;
 		}
+		if(playableCards!=null) {
+			this.guimanager.setPlayableCards(playableCards);
+		}
 		if(this.guimanager.getMyId() == turnPlayerId && this.name.equals(turnPlayerName)) {
 			//自分のターン
-			System.out.println("自分のターン!");
-			//Playできるカードを調べる?
-			boolean playable = true;
-			boolean pass = false;
-			//playable=false for(String cardstr: myHand)if(!playable)cardstr in MyHand; playable = true;
-			int max_pass = Integer.valueOf(this.guimanager.getRule()[0]);
-			if(this.guimanager.getPlayerPassNum().get(turnPlayerId) < max_pass)
-				pass=true;	
+			if(playCard==null&&playPass==false) {
+				this.guimanager.setPlayableCards(playableCards);
+				System.out.println("自分のターン!");
+				//Playできるカードを調べる?
+				boolean playable = true;
+				boolean pass = false;
+				//playable=false for(String cardstr: myHand)if(!playable)cardstr in MyHand; playable = true;
+				int max_pass = Integer.valueOf(this.guimanager.getRule()[0]);
+				if(this.guimanager.getPlayerPassNum().get(turnPlayerId) < max_pass)
+					pass=true;	
 
-			this.guimanager.setCardClickFlag(playable);
-			this.guimanager.setPassClickFlag(pass);
-			this.guimain.updateTurnLabel("あなたのターンです！");
+				this.guimanager.setCardClickFlag(playable);
+				this.guimanager.setPassClickFlag(pass);
+				this.guimain.updateTurnLabel("あなたのターンです！");
+			}
+			else {
+				if(playCard!=null)
+					this.guimain.updateTurnLabel("あなたは、["+playCard+"]を出しました");
+				if(playPass==true)
+					this.guimain.updateTurnLabel("あなたは、[パス]をしました");
+			}
 		}
 		else {
 			//他人のターン
 			System.out.println("OtherPlayer :"+game.getTurnPlayerName()+"play=[Card:"+playCard+", Joker:"+game.isPlayJoker()+", Pass:"+playPass+"]");
+			this.guimanager.setCardClickFlag(false);
+			this.guimanager.setPassClickFlag(false);
 			this.guimain.updateTurnLabel("Player["+game.getTurnPlayerName()+"]さんのターンです.");
 			if(playCard!=null && playPass==false) {
 				//何かカードを出した
+				//TODO
 				int card_num = this.guimanager.getPlayerCardNum().get(turnPlayerId);
 				this.guimanager.getPlayerCardNum().put(turnPlayerId, card_num-1);
 				
@@ -280,6 +298,8 @@ public class Client implements GUIListener{
 	@Override
 	public void nextGame(boolean next) {
 		
+		this.guimain.nextScene("Wait.fxml");
+		this.guimain.waitCon.equals("");
 	}
 
 	@Override
@@ -337,6 +357,7 @@ public class Client implements GUIListener{
 	public void recvRanking(PlayersRankingProtocol prot) {
 		System.out.println("Ranking画面！");
 		PlayersRanking ranking = prot.getPlayersRanking();
+		this.guimanager.setRound(1);
 		this.guimanager.setRoundScore(ranking.getPlayersRanking());
 		this.guimain.nextScene("Ranking.fxml");
 	}

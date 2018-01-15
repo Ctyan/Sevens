@@ -46,4 +46,8 @@ public class Card {
 		}
 		return null;
 	}
+	
+	public String toString() {
+		return this.getMark(this.cardType)+", "+this.cardNumber;
+	}
 }

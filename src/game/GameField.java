@@ -3,7 +3,8 @@ package game;
 public class GameField {
 
 	private boolean[][] cardField;
-
+	
+	
 	/**場の管理<br>初期値はfalse*/
 	public GameField() {
 		cardField = new boolean[4][13];
@@ -67,4 +68,5 @@ public class GameField {
 
 		return back;
 	}
+	
 }
