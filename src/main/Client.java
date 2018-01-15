@@ -333,6 +333,13 @@ public class Client implements GUIListener{
 		sk.setPlayersPassNum(null);
 		send(prot);
 	}
+
+	public void recvRanking(PlayersRankingProtocol prot) {
+		System.out.println("Ranking画面！");
+		PlayersRanking ranking = prot.getPlayersRanking();
+		this.guimanager.setRoundScore(ranking.getPlayersRanking());
+		this.guimain.nextScene("Ranking.fxml");
+	}
 	
 }
 
@@ -392,6 +399,10 @@ class ClientReciever extends Thread{
 		//GameStarterKit
 		case 5:
 			owner.recvGameStarterKit((GameStarterKitProtocol)prot);
+			break;
+		//Ranking
+		case 6:
+			owner.recvRanking((PlayersRankingProtocol)prot);
 			break;
 		default:
 			break;

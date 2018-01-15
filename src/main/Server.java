@@ -223,7 +223,7 @@ public class Server implements Runnable{
 			String cardstr = game.getPlayCard();
 			card = cardstringToCard(cardstr);
 		}
-		gamemanager.turnProcessing(card, playJoker, playPass, 0);
+		//gamemanager.turnProcessing(card, playJoker, playPass, 0);
 		if(playPass)gamemanager.doPass(sender.player);
 		//あがり?
 		if(playerHandsNum==0) {
@@ -248,9 +248,16 @@ public class Server implements Runnable{
 		}
 		else {
 			//ラウンドが終了!ランキング画面へ
+			int[] id_ranking = new int[roundPlayerRanking.length];
+			int i = 0;
+			for(Player p: roundPlayerRanking) {
+				id_ranking[i]=p.getPlayerID();
+				i++;
+			}
+			PlayersRanking pr = new PlayersRanking(id_ranking);
+			Protocol p = new PlayersRankingProtocol(pr);
 			for(ServerThread st: players.values()) {
-				//RankingPlot
-				//st.send();
+				st.send(p);
 			}
 		}
 	}
@@ -273,13 +280,13 @@ public class Server implements Runnable{
 
 	public void sendPlayersNextTurn(Player turnPlayer) {
 		//int playerIndex = gamemanager.nextThisTurnPlayerNumber();		
-		/*
+		/**/
 		int listindex = inGamePlayers.indexOf(turnPlayer);
 		if(0 <= listindex && listindex < inGamePlayers.size()-1)
 			turnPlayer = inGamePlayers.get(listindex+1);
 		else
 			turnPlayer = inGamePlayers.get(0);
-		*/
+		
 		this.gamemanager.nextThisTurnPlayerNumber();
 		turnPlayer = this.gamemanager.getThisTurnPlayer();
 		
@@ -350,11 +357,11 @@ public class Server implements Runnable{
 //			Player[] ps = gamemanager.getPlayerList();
 //			int index = gamemanager.getThisTurnPlayerNumber();
 			
-			Player turnPlayer = this.gamemanager.getThisTurnPlayer();
+//			Player turnPlayer = this.gamemanager.getThisTurnPlayer();
 //			if(turnPlayer.equals(ps[index]))
 //				System.out.println("Playerあってる！");
 //			
-			//Player turnPlayer = inGamePlayers.get(0);
+			Player turnPlayer = inGamePlayers.get(0);
 			System.out.println("ターンプレイヤー, ID:"+turnPlayer.getPlayerID()+", Player:"+turnPlayer.getUserName());
 			Protocol gameProt = new GameProtocol(new Game(turnPlayer.getPlayerID(), turnPlayer.getUserName()));
 			gameProt.setProtocol_Bool(true);
