@@ -347,13 +347,13 @@ public class Server implements Runnable{
 		}
 		//全員準備できたら, 一番最初のターン人の情報を全員へ送信
 		if(inGamePlayers.size()==gamemanager.getPlayerCount()) {
-			Player[] ps = gamemanager.getPlayerList();
-			int index = gamemanager.getThisTurnPlayerNumber();
+//			Player[] ps = gamemanager.getPlayerList();
+//			int index = gamemanager.getThisTurnPlayerNumber();
 			
 			Player turnPlayer = this.gamemanager.getThisTurnPlayer();
-			if(turnPlayer.equals(ps[index]))
-				System.out.println("Playerあってる！");
-			
+//			if(turnPlayer.equals(ps[index]))
+//				System.out.println("Playerあってる！");
+//			
 			//Player turnPlayer = inGamePlayers.get(0);
 			System.out.println("ターンプレイヤー, ID:"+turnPlayer.getPlayerID()+", Player:"+turnPlayer.getUserName());
 			Protocol gameProt = new GameProtocol(new Game(turnPlayer.getPlayerID(), turnPlayer.getUserName()));
