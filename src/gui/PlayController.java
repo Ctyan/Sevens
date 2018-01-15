@@ -70,7 +70,21 @@ public class PlayController implements Initializable {
 		createPlayer(); //playerの名前、パス回数の表示
 		createRule(); //ルールの表示
 	}
-
+	
+	public void updateSceneParam() {
+		createVPlayer(); //vplayerの名前、カード枚数、パス回数の表示
+		createPlayer(); //playerの名前、パス回数の表示
+	}
+	
+	public void updateTurnLabel(String turnMsg) {
+		Label turnLabel = new Label(turnMsg);
+		turnLabel.setId("chattext");
+		if(chathbox.getChildren().size()>=1 && myHand.size()!=0)
+			chathbox.getChildren().remove(0);
+		
+		chathbox.getChildren().add(turnLabel);
+	}
+	
 	public void setArray() {
     	//all player status
 		playerName = manager.getPlayerName();
@@ -235,7 +249,7 @@ public class PlayController implements Initializable {
 		}
 		if(listener != null) listener.sendChat(text);
 	}
-
+	
 	@FXML
 	public void PassCount(ActionEvent e) {
 		if(manager.getPassClickFlag()){
