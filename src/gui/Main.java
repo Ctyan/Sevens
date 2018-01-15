@@ -49,6 +49,18 @@ public class Main extends Application {
 			playCon.boardDraw(card);
 		});
 	}
+	
+	public void updatePlayBoard() {
+		Platform.runLater(() -> {
+			playCon.updateSceneParam();
+		});
+	}
+	
+	public void updateTurnLabel(String turnMsg) {
+		Platform.runLater(() -> {
+			playCon.updateTurnLabel(turnMsg);
+		});
+	}
 
 	public static void main(String[] args) {
 		launch(args);
