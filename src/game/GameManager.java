@@ -114,12 +114,17 @@ public class GameManager{
 
 	/**現在のターンのプレイヤーナンバーを取得*/
 	public int getThisTurnPlayerNumber() {
+		if(playerCount == 0) {
+			return -1;
+		}
 		return thisTurnPlayerNumber % playerCount;
 	}
 
 	/**現在のターンのプレイヤーを取得*/
 	public Player getThisTurnPlayer() {
-		//TODO 一番初めに呼び出したときエラーを吐かれる
+		if(getThisTurnPlayerNumber() == -1) {
+			return null;
+		}
 		return playerList[getThisTurnPlayerNumber()];
 	}
 
@@ -127,7 +132,7 @@ public class GameManager{
 	public int nextThisTurnPlayerNumber() {
 		while (true) {
 			++thisTurnPlayerNumber;
-			if(!playerList[thisTurnPlayerNumber].getEndGameFlag()) {
+			if(!getThisTurnPlayer().getEndGameFlag()) {
 				break;
 			}
 		}
@@ -215,7 +220,7 @@ public class GameManager{
 		p.endGame();
 		ranking.registerPlayer(p, win);
 	}
-
+	
 	/**ゲームが終了する条件か確認する*/
 	public boolean cheackEndGame() {
 		int counter = 0;
@@ -242,7 +247,7 @@ public class GameManager{
 				// パスの残り回数がない場合
 				setEndGamePlayer(getThisTurnPlayer(), false);
 				// そのプレイヤーの手持ちを全て置く
-				List<Card> list = getPlayerCardList(thisTurnPlayerNumber);
+				List<Card> list = getPlayerCardList(getThisTurnPlayerNumber());
 				for(Card c : list) {
 					if(c != null) {
 						playCardList.set(playCardList.indexOf(c), c);
@@ -370,5 +375,12 @@ public class GameManager{
 				System.out.println();
 			}
 		}
+	}
+	
+	public Ranking getRanking() {
+		if(cheackEndGame()) {
+			return ranking;
+		}
+		return null;
 	}
 }
