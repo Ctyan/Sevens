@@ -1,5 +1,6 @@
 package gui;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -7,41 +8,29 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
 
 public class StartController {
+	GUIManager manager = GUIManager.getInstance();
+	GUIListener listener = manager.listener;
 	public TextField text;
-	boolean flag = false;
 	Alert alert = new Alert(AlertType.INFORMATION);
-	GUIListener listener;
 
 	@FXML
-	protected void StartGame(ActionEvent e){
+	protected void StartGame(ActionEvent e) {
 		System.out.println("start");
 		String username = text.getText();
-		if(username.equals("")){
+		if (username.equals("")) {
 			alert.setTitle("Information Dialog");
 			alert.setHeaderText(null);
 			alert.setContentText("ユーザ名を入力してください");
 			alert.showAndWait();
-			flag = false;
-		}else{
+		} else {
 			System.out.println(username);
-			Main.manager.listener.joinGame(username);
-			flag = true;
-			Main.manager.plusMember();
-		}
-		if(flag){
-			if(Main.manager.memberCount == 1){
-				Main.manager.nextScene("RuleSettings.fxml");
-			}else{
-				Main.manager.nextScene("Wait.fxml");
+			if (listener != null){
+				listener.joinGame(username);
+				manager.nextScene("Wait.fxml");
+				//if (manager.getRuleSceneFlag()) manager.nextScene("RuleSettings.fxml");
+				//else manager.nextScene("Wait.fxml");
 			}
 		}
 	}
 
-	public GUIListener getListener() {
-		return listener;
-	}
-
-	public void setListener(GUIListener listener) {
-		this.listener = listener;
-	}
 }
