@@ -94,10 +94,13 @@ public class GameManager{
 		playCardList = playingCard.getCardList();
 
 		/**カードから7を抜き出す*/
-		playCardList.remove(new Card(Card.SPADE_TYPE, 7));
-		playCardList.remove(new Card(Card.HEART_TYPE, 7));
-		playCardList.remove(new Card(Card.CLUB_TYPE, 7));
-		playCardList.remove(new Card(Card.DIA_TYPE, 7));
+		int listsize = playCardList.size();
+		for(int i = 0; i < listsize; i++) {
+			if(playCardList.get(i).getNumber()==7) {
+				playCardList.remove(i);
+				listsize--;
+			}
+		}
 
 		/**カードをシャッフルする*/
 		Collections.shuffle(playCardList);
@@ -116,6 +119,7 @@ public class GameManager{
 
 	/**現在のターンのプレイヤーを取得*/
 	public Player getThisTurnPlayer() {
+		//TODO 一番初めに呼び出したときエラーを吐かれる
 		return playerList[getThisTurnPlayerNumber()];
 	}
 

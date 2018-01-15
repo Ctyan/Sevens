@@ -186,11 +186,18 @@ public class GUIManager {
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			thisStage.setScene(scene);
 			thisStage.show();
+			//各種Controllerのメソッドを使うために必要
+			if(nextScene.equals("RuleSettings.fxml"))
+				Main.ruleCon = loader.getController();
+			else if(nextScene.equals("Wait.fxml")) 
+				Main.waitCon = loader.getController();
+			else if(nextScene.equals("Play.fxml"))
+				Main.playCon = loader.getController();
 		}
 		catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-
+	
 }
 

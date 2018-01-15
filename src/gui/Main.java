@@ -11,6 +11,8 @@ import javafx.stage.Stage;
 public class Main extends Application {
 	private GUIManager manager = GUIManager.getInstance();
 	public static RuleController ruleCon;
+	public static WaitController waitCon;//wait画面キャンセル用
+	public static PlayController playCon;
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -39,6 +41,12 @@ public class Main extends Application {
 	public void nextScene(String scene) {
 		Platform.runLater(() -> {
 			manager.nextScene(scene);
+		});
+	}
+	
+	public void playedCardByOtherPlayer(String card, boolean isJoker) {
+		Platform.runLater(() -> {
+			playCon.boardDraw(card);
 		});
 	}
 
