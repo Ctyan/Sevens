@@ -1,6 +1,7 @@
 package protocol;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -58,5 +59,40 @@ public class GameStarterKit implements Serializable{
 
 	public void setRule(GameRule rule) {
 		this.rule = rule;
-	}	
+	}
+	
+	public int getPlayer_id() {
+		// TODO 自動生成されたメソッド・スタブ
+		return 0;
+	}
+	
+	public GameRule getGameRule() {
+		// TODO 自動生成されたメソッド・スタブ
+		return rule;
+	}
+
+	public ArrayList<String> getPlayerIDList() {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
+
+	public Map<Integer, Integer> getPlayersPassNum() {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
+
+	public void setGameRule(Object object) {
+		// TODO 自動生成されたメソッド・スタブ
+		
+	}
+
+	public void setPlayerIDList(Object object) {
+		// TODO 自動生成されたメソッド・スタブ
+		
+	}
+
+	public void setPlayersPassNum(Object object) {
+		// TODO 自動生成されたメソッド・スタブ
+		
+	}
 }

@@ -12,9 +12,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import game.*;
-import item.*;
-import protocol.*;
+import game.GameManager;
+import item.Card;
+import item.Player;
+import item.Ranking;
+import protocol.ChatProtocol;
+import protocol.Game;
+import protocol.GameProtocol;
+import protocol.GameRule;
+import protocol.GameRuleProtocol;
+import protocol.GameStarterKit;
+import protocol.GameStarterKitProtocol;
+import protocol.PlayerEntry;
+import protocol.PlayerEntryProtocol;
+import protocol.PlayersRanking;
+import protocol.PlayersRankingProtocol;
+import protocol.Protocol;
 
 public class Server implements Runnable{
 	Map<Socket, ServerThread> clients;
@@ -196,7 +209,7 @@ public class Server implements Runnable{
 			for(int i = 0; i < player_array.length && player_array[i]!=null; i++) {
 				Player p = player_array[i];
 				int pid = p.getPlayerID();
-				GameStarterKit starterkit = new GameStarterKit(pid, gr);
+				GameStarterKit starterkit = new GameStarterKit(gr);
 				starterkit.setHands(players_strcards.get(pid));
 				starterkit.setPlayerIDList(playerIDList);
 				starterkit.setPlayers_name(players_name);
