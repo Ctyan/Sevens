@@ -58,7 +58,5 @@ public class GameStarterKit implements Serializable{
 
 	public void setRule(GameRule rule) {
 		this.rule = rule;
-	}
-	
-	
+	}	
 }

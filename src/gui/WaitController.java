@@ -29,7 +29,4 @@ public class WaitController {
 		//manager.nextScene("Start.fxml");
 		if(listener != null) listener.cancelGame(true);
 	}
-	
-	
-	
 }
