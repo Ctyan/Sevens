@@ -209,11 +209,11 @@ public class GUIManager {
 	}
 
 	public boolean isPlayableCard(String cardname) {
-		System.out.println("playable:"+this.playableCards);
+		//System.out.println("playable:"+this.playableCards);
 		if(this.playableCards==null)return false;
 		if(cardname.equals("x1"))return true;
 		for(String okCard: playableCards) {
-			System.out.println("okCard:"+okCard);
+			//System.out.println("okCard:"+okCard);
 			if(cardname.equals(okCard))return true;
 		}
 		return false;
