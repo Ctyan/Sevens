@@ -48,9 +48,9 @@ public class PlayController implements Initializable {
 	public HBox rulehbox;
 	// chat
 	public HBox chathbox;
-	public MenuItem stamp1, stamp2, stamp3, stamp4;
-	ArrayList<Label> chat = new ArrayList<Label>();
-	private int chatCount = 0;
+	//public MenuItem stamp1, stamp2, stamp3, stamp4;
+	//ArrayList<Label> chat = new ArrayList<Label>();
+	//private int chatCount = 0;
 	//all player status
 	Map<Integer, String> playerName = new HashMap<>(); //ID　プレイヤー名
 	Map<Integer, Integer> playerCardNum = new HashMap<>(); //ID　カード枚数
@@ -74,6 +74,7 @@ public class PlayController implements Initializable {
 	public void updateSceneParam() {
 		createVPlayer(); //vplayerの名前、カード枚数、パス回数の表示
 		createPlayer(); //playerの名前、パス回数の表示
+		updatePlayableHand();
 	}
 	
 	public void updateTurnLabel(String turnMsg) {
@@ -137,6 +138,8 @@ public class PlayController implements Initializable {
 			iv.setFitWidth(100);
 			iv.setLayoutX(x);
 			iv.setLayoutY(y);
+			
+			//iv.setEffect(null);
 			iv.setEffect(lighting);
 
 			imageview.add(iv);
@@ -144,8 +147,11 @@ public class PlayController implements Initializable {
 			anchorpane.getChildren().add(imageview.get(i));
 			x += 40;
 			imageview.get(i).setOnMouseClicked((MouseEvent e) -> {
-				if(manager.getCardClickFlag()){
-					System.out.println(e.getSource());
+				ImageView me = (ImageView)e.getSource();
+				int myindex = imageview.indexOf(me);
+				String cardname = myHand.get(myindex);
+				System.out.println("Clicked myHand of "+ cardname);
+				if(manager.isPlayableCard(cardname)&&manager.getPassClickFlag()){
 					removeCard((ImageView)e.getSource());
 				}
 			});
@@ -189,16 +195,36 @@ public class PlayController implements Initializable {
 
 	/**手札を再描画するメソッド*/
 	public void updateHand(int index, double x){
+		//TODO 
 		double newX = x;
 		for(int i=0; i<imageview.size()-index; i++){
+			ImageView iv = imageview.get(index+i);
+			String cardname = myHand.get(index+i);
+			if(manager.isPlayableCard(cardname))
+				iv.setEffect(null);
+			else
+				iv.setEffect(new Lighting());
+			
 			imageview.get(index+i).setLayoutX(newX);
 			newX += 40;
+		}
+	}
+	
+	/**プレイ可能なカードを明るくする*/
+	public void updatePlayableHand() {
+		for(int i = 0; i < myHand.size(); i++) {
+			ImageView iv = imageview.get(i);
+			String cardname = myHand.get(i);
+			if(manager.isPlayableCard(cardname))
+				iv.setEffect(null);
+			else
+				iv.setEffect(new Lighting());
 		}
 	}
 
 	/**選択されたカードをボードに表示するメソッド*/
 	public void boardDraw(String text){
-		String mark = text.replaceFirst("[1-9]+", "");
+		String mark = text.replaceFirst("[0-9]+", "");
 		String number = text.replaceFirst("[a-z]+", "");
 		int num = Integer.valueOf(number);
 		ImageView boardIv = null;
@@ -214,6 +240,9 @@ public class PlayController implements Initializable {
 		else if(mark.equals("heart")) boardIv.setLayoutY(90);
 		else if(mark.equals("club")) boardIv.setLayoutY(180);
 	    else if(mark.equals("diamond")) boardIv.setLayoutY(270);
+	    else {
+	    	System.out.println("boardDraws else:"+text);
+	    }
 
 		if(num == 1) boardIv.setLayoutX(0);
 		else if(num == 2) boardIv.setLayoutX(60);
@@ -231,25 +260,25 @@ public class PlayController implements Initializable {
 
 		board.getChildren().addAll(boardIv);
 	}
-
-	@FXML
-	public void StampAction(ActionEvent e) {
-		String text = "";
-		if(e.getTarget().equals(stamp1)) text = stamp1.getText();
-		else if(e.getTarget().equals(stamp2)) text = stamp2.getText();
-		else if(e.getTarget().equals(stamp3)) text = stamp3.getText();
-		else if(e.getTarget().equals(stamp4)) text = stamp4.getText();
-		chat.add(new Label(playerName.get(myId) + "：" + text));
-		chat.get(chatCount).setId("chattext");
-		chathbox.getChildren().addAll(chat.get(chatCount));
-		chatCount++;
-		if (chatCount > 7) {
-			chathbox.getChildren().remove(chat.remove(0));
-			chatCount--;
-		}
-		if(listener != null) listener.sendChat(text);
-	}
-	
+//
+//	@FXML
+//	public void StampAction(ActionEvent e) {
+//		String text = "";
+//		if(e.getTarget().equals(stamp1)) text = stamp1.getText();
+//		else if(e.getTarget().equals(stamp2)) text = stamp2.getText();
+//		else if(e.getTarget().equals(stamp3)) text = stamp3.getText();
+//		else if(e.getTarget().equals(stamp4)) text = stamp4.getText();
+//		chat.add(new Label(playerName.get(myId) + "：" + text));
+//		chat.get(chatCount).setId("chattext");
+//		chathbox.getChildren().addAll(chat.get(chatCount));
+//		chatCount++;
+//		if (chatCount > 7) {
+//			chathbox.getChildren().remove(chat.remove(0));
+//			chatCount--;
+//		}
+//		if(listener != null) listener.sendChat(text);
+//	}
+//	
 	@FXML
 	public void PassCount(ActionEvent e) {
 		if(manager.getPassClickFlag()){

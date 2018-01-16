@@ -93,11 +93,12 @@ public class GameManager{
 		playingCard = new PlayingCard(gamePlayable.isJoker());
 		playCardList = playingCard.getCardList();
 
-		/**カードから7を抜き出す*/
+		/**カードから7を抜き出しゲームフィールドへ*/
 		int listsize = playCardList.size();
 		for(int i = 0; i < listsize; i++) {
 			if(playCardList.get(i).getNumber()==7) {
-				playCardList.remove(i);
+				Card card = playCardList.remove(i);
+				setCard(card);
 				listsize--;
 			}
 		}

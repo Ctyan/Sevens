@@ -9,7 +9,7 @@
 
 <AnchorPane prefHeight="700.0" prefWidth="1100.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.WaitController">
    <children>
-      <Button layoutX="930.0" layoutY="638.0" mnemonicParsing="false" onAction="#cancelButtonAction" prefHeight="48.0" prefWidth="155.0" style="-fx-border-radius: 10px; -fx-background-radius: 10px;" text="CANCEL">
+      <Button fx:id="cancelbutton" layoutX="930.0" layoutY="638.0" mnemonicParsing="false" onAction="#cancelButtonAction" prefHeight="48.0" prefWidth="155.0" style="-fx-border-radius: 10px; -fx-background-radius: 10px;" text="CANCEL">
          <font>
             <Font size="18.0" />
          </font>

@@ -1,10 +1,13 @@
 package main;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -168,6 +171,15 @@ public class Server implements Runnable{
 			Player[] player_array = gamemanager.getPlayerList();
 			for(int i = 0; i < player_array.length && player_array[i]!=null; i++) {
 				List<Card> cards = gamemanager.getPlayerCardList(i);
+				Collections.sort(cards, new Comparator<Card>() {
+					@Override
+					public int compare(Card o1, Card o2) {
+						int type = o1.getType() - o2.getType();
+						if(type != 0)return type;
+						int num = o1.getNumber() - o2.getNumber();
+						return num;
+					}
+				});
 				Player p = player_array[i];
 				int pid = p.getPlayerID();
 				String pname = p.getUserName();
@@ -208,11 +220,7 @@ public class Server implements Runnable{
 	public void recvGame(GameProtocol prot, ServerThread sender) {
 		//TODO Game進行に関する情報の受け取り
 		Game game = prot.getGame();
-		for(ServerThread st: players.values()) {
-			//送り主以外に何をしたか知らせる
-			if(!st.equals(sender))
-				st.send(prot);
-		}
+		
 		String playCard = game.getPlayCard();
 		boolean playJoker = game.isPlayJoker();
 		boolean playPass = game.isPlayPass();
@@ -222,9 +230,16 @@ public class Server implements Runnable{
 			//ターンプレイヤーがカードを出した
 			String cardstr = game.getPlayCard();
 			card = cardstringToCard(cardstr);
+			//if(playJoker);
+			System.out.println("player put:"+card);
+			gamemanager.getGamePlayable().setCard(card);
+		}
+		for(ServerThread st: players.values()) {
+			//何をしたか知らせる
+			st.send(prot);
 		}
 		//gamemanager.turnProcessing(card, playJoker, playPass, 0);
-		if(playPass)gamemanager.doPass(sender.player);
+		//if(playPass)gamemanager.doPass(sender.player);
 		//あがり?
 		if(playerHandsNum==0) {
 			//このラウンドでの初めてのランキング生成
@@ -242,7 +257,8 @@ public class Server implements Runnable{
 			prot.setProtocol_Bool(false);
 			sender.send(prot);
 		}
-		//次ターン
+		
+		//プレイヤーがいるなら次ターン
 		if(inGamePlayers.size()!=0) {
 			sendPlayersNextTurn(sender.player);
 		}
@@ -287,12 +303,18 @@ public class Server implements Runnable{
 		else
 			turnPlayer = inGamePlayers.get(0);
 		
-		this.gamemanager.nextThisTurnPlayerNumber();
-		turnPlayer = this.gamemanager.getThisTurnPlayer();
+		//this.gamemanager.nextThisTurnPlayerNumber();
+		//turnPlayer = this.gamemanager.getThisTurnPlayer();
+		
+		List<Card> playableCards = gamemanager.getGamePlayable().getPlayableCards();
+		List<String> playables = playersCardToString(playableCards);
 		
 		System.out.println("NextTurn, ID:"+turnPlayer.getPlayerID()+", Name:"+turnPlayer.getUserName());
-		Protocol gameProt = new GameProtocol(new Game(turnPlayer.getPlayerID(), turnPlayer.getUserName()));
+		Game game = new Game(turnPlayer.getPlayerID(), turnPlayer.getUserName());
+		Protocol gameProt = new GameProtocol(game);
+		game.setPlayableCards(playables);
 		gameProt.setProtocol_Bool(true);
+		
 		for(ServerThread st: players.values()) {
 			//Game情報を送信
 			st.send(gameProt);
@@ -360,10 +382,16 @@ public class Server implements Runnable{
 //			Player turnPlayer = this.gamemanager.getThisTurnPlayer();
 //			if(turnPlayer.equals(ps[index]))
 //				System.out.println("Playerあってる！");
-//			
+			
+			
+			List<Card> playableCards = gamemanager.getGamePlayable().getPlayableCards();
+			List<String> playables = playersCardToString(playableCards);
+			
 			Player turnPlayer = inGamePlayers.get(0);
 			System.out.println("ターンプレイヤー, ID:"+turnPlayer.getPlayerID()+", Player:"+turnPlayer.getUserName());
-			Protocol gameProt = new GameProtocol(new Game(turnPlayer.getPlayerID(), turnPlayer.getUserName()));
+			Game game = new Game(turnPlayer.getPlayerID(), turnPlayer.getUserName());
+			Protocol gameProt = new GameProtocol(game);
+			game.setPlayableCards(playables);
 			gameProt.setProtocol_Bool(true);
 			for(ServerThread st: players.values()) {
 				//Game情報を送信

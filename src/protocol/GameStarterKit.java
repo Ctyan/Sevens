@@ -4,15 +4,11 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-import item.Player;
-
 public class GameStarterKit implements Serializable{
 	private static final long serialVersionUID = 9138036041514881803L;
-	private int player_id;
-	private List<Integer> playerIDList;
 	private Map<Integer, String> players_name;
 	private Map<Integer, Integer> players_card_num;
-	private Map<Integer, Integer> players_pass_num;
+	private List<Integer> players_id;
 	private List<String> hands;
 	private GameRule rule;
 	
@@ -22,11 +18,6 @@ public class GameStarterKit implements Serializable{
 	
 	public GameStarterKit(GameRule rule) {
 		this.rule = rule;
-	}
-
-	public GameStarterKit(int pid, GameRule gr) {
-		this.player_id = pid;
-		this.rule = gr;
 	}
 
 	public Map<Integer, String> getPlayers_name() {
@@ -45,6 +36,14 @@ public class GameStarterKit implements Serializable{
 		this.players_card_num = players_card_num;
 	}
 
+	public List<Integer> getPlayers_id() {
+		return players_id;
+	}
+
+	public void setPlayers_id(List<Integer> players_id) {
+		this.players_id = players_id;
+	}
+
 	public List<String> getHands() {
 		return hands;
 	}
@@ -53,37 +52,11 @@ public class GameStarterKit implements Serializable{
 		this.hands = hands;
 	}
 
-	public GameRule getGameRule() {
+	public GameRule getRule() {
 		return rule;
 	}
-	
-	public void setGameRule(GameRule rule) {
+
+	public void setRule(GameRule rule) {
 		this.rule = rule;
-	}
-
-	public int getPlayer_id() {
-		return player_id;
-	}
-
-	public void setPlayer_id(int player_id) {
-		this.player_id = player_id;
-	}
-
-	public List<Integer> getPlayerIDList() {
-		return playerIDList;
-	}
-
-	public void setPlayerIDList(List<Integer> playerIDList) {
-		this.playerIDList = playerIDList;
-	}
-
-	public Map<Integer, Integer> getPlayersPassNum() {
-		return players_pass_num;
-	}
-
-	public void setPlayersPassNum(Map<Integer, Integer> players_pass_num) {
-		this.players_pass_num = players_pass_num;
-	}
-
-	
+	}	
 }

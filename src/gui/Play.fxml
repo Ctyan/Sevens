@@ -14,7 +14,7 @@
 
 <AnchorPane fx:id="anchorpane" prefHeight="700.0" prefWidth="1100.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.PlayController">
    <children>
-      <SplitMenuButton layoutX="464.0" layoutY="10.0" mnemonicParsing="false" style="-fx-base: orange;" text="STAMP">
+     <!-- <SplitMenuButton layoutX="464.0" layoutY="10.0" mnemonicParsing="false" style="-fx-base: orange;" text="STAMP">
         <items>
           <MenuItem fx:id="stamp1" mnemonicParsing="false" onAction="#StampAction" text="Action 1" />
           <MenuItem fx:id="stamp2" mnemonicParsing="false" onAction="#StampAction" text="Action 2" />
@@ -24,7 +24,8 @@
          <font>
             <Font size="14.0" />
          </font>
-      </SplitMenuButton>
+      </SplitMenuButton> 
+    --> 
       <Label alignment="CENTER" layoutX="464.0" layoutY="453.0" prefHeight="30.0" prefWidth="258.0" style="-fx-border-color: black;" text="　            ">
          <font>
             <Font size="18.0" />
