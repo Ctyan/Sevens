@@ -221,10 +221,23 @@ public class Client implements GUIListener{
 				//playable=false for(String cardstr: myHand)if(!playable)cardstr in MyHand; playable = true;
 				int max_pass = Integer.valueOf(this.guimanager.getRule()[0]);
 				if(this.guimanager.getPlayerPassNum().get(turnPlayerId) < max_pass)
-					pass=true;	
-
-				this.guimanager.setCardClickFlag(playable);
-				this.guimanager.setPassClickFlag(pass);
+					pass=true;
+				
+//				boolean haveplayable = false;
+//				if(this.guimanager.getPlayerPassNum().get(turnPlayerId) >= max_pass) {
+//					for(String str :guimanager.getMyHand()) {
+//						for(String ccc: playableCards) {
+//							if(str.equals(ccc)) {
+//								haveplayable = true;
+//								break;
+//							}
+//						}
+//					}
+//					//if(!haveplayable)pass=true;
+//				}
+				
+				this.guimanager.setCardClickFlag(true);
+				this.guimanager.setPassClickFlag(true);
 				this.guimain.updateTurnLabel("あなたのターンです！");
 			}
 			else {
@@ -244,6 +257,7 @@ public class Client implements GUIListener{
 				//何かカードを出した
 				//TODO
 				int card_num = this.guimanager.getPlayerCardNum().get(turnPlayerId);
+				System.out.println("card_num:"+card_num);
 				this.guimanager.getPlayerCardNum().put(turnPlayerId, card_num-1);
 				
 				if(game.isPlayJoker()) {

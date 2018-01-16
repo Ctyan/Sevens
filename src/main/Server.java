@@ -225,22 +225,25 @@ public class Server implements Runnable{
 		boolean playPass = game.isPlayPass();
 		int playerHandsNum = game.getTurnPlayerHandsNum();
 		Card card = null;
-		if(playCard!=null) {
-			//ターンプレイヤーがカードを出した
-			String cardstr = game.getPlayCard();
-			card = cardstringToCard(cardstr);
-			//if(playJoker);
-			System.out.println("player put:"+card);
-			gamemanager.getGamePlayable().setCard(card);
-		}
-		for(ServerThread st: players.values()) {
-			//何をしたか知らせる
-			st.send(prot);
+		if(playCard!=null||playPass==true) {
+			if(!playPass) {
+				//ターンプレイヤーがカードを出した
+				String cardstr = game.getPlayCard();
+				card = cardstringToCard(cardstr);
+				//if(playJoker);
+				System.out.println("player put:"+card);
+				gamemanager.getGamePlayable().setCard(card);
+			}
+			for(ServerThread st: players.values()) {
+				//何をしたか知らせる
+				//if(!(playPass&&sender.player.getPlayerID()==game.getTurnPlayerId()))
+					st.send(prot);
+			}
 		}
 		//gamemanager.turnProcessing(card, playJoker, playPass, 0);
 		//if(playPass)gamemanager.doPass(sender.player);
 		//あがり?
-		if(playerHandsNum==0) {
+		if(playCard!=null&&playPass==false&&playerHandsNum==0) {
 			//このラウンドでの初めてのランキング生成
 			if(roundPlayerRanking==null)
 				roundPlayerRanking = new Player[inGamePlayers.size()];
